@@ -25,18 +25,3 @@ export async function submitContactForm(data: {
     return { success: false, error }
   }
 }
-
-// Newsletter subscription
-export async function subscribeNewsletter(email: string) {
-  try {
-    const { data: result, error } = await supabase.functions.invoke('newsletter-subscribe', {
-      body: { email }
-    })
-
-    if (error) throw error
-    return { success: true, data: result }
-  } catch (error) {
-    console.error('Newsletter subscription error:', error)
-    return { success: false, error }
-  }
-}
