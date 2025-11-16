@@ -82,11 +82,11 @@ body {
 
 /* Glow Effect */
 .glow-red {
-  box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.8);
 }
 
 .glow-red:hover {
-  box-shadow: 0 0 30px rgba(220, 38, 38, 0.5);
+  box-shadow: 0 0 30px rgba(220, 38, 38, 0.8);
 }
 
 /* Fade In Animation */

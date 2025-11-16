@@ -62,7 +62,7 @@ function App() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isNavFixed ? 'nav-fixed' : ''}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent ${isNavFixed ? 'nav-fixed' : ''}`}>
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <img src={`${baseUrl}images/logo.png`} alt="Salsa Contigo" className="h-16 md:h-20" />
@@ -169,7 +169,7 @@ function App() {
             </div>
 
             {/* Social Event Promo */}
-            <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 hover:border-primary/50 transition-all duration-300 fade-in">
+            <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 hover:border-primary/50 transition-all duration-300 glow-red fade-in">
               <div className="flex items-center gap-3 mb-4">
                 <Users className="text-primary" size={24} />
                 <h3 className="font-script text-3xl text-primary">Soirées Sociales</h3>
@@ -197,7 +197,7 @@ function App() {
           
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
             {/* Dance Styles */}
-            <div className="bg-black/50 p-6 rounded-lg border border-primary/20 fade-in">
+            <div className="bg-black/50 p-6 rounded-lg border border-primary/20 glow-red fade-in">
               <h3 className="font-script text-2xl text-primary mb-4">Styles de Danse</h3>
               <ul className="space-y-2 text-gray-300">
                 <li className="flex items-center gap-2"><Music size={16} className="text-primary" /> Salsa</li>
@@ -210,7 +210,7 @@ function App() {
             </div>
 
             {/* Levels */}
-            <div className="bg-black/50 p-6 rounded-lg border border-primary/20 fade-in" style={{ animationDelay: '0.1s' }}>
+            <div className="bg-black/50 p-6 rounded-lg border border-primary/20 glow-red fade-in" style={{ animationDelay: '0.1s' }}>
               <h3 className="font-script text-2xl text-primary mb-4">Niveaux</h3>
               <ul className="space-y-2 text-gray-300">
                 <li className="flex items-center gap-2"><ChevronDown size={16} className="text-primary" /> Débutant</li>
@@ -220,7 +220,7 @@ function App() {
             </div>
 
             {/* Formats */}
-            <div className="bg-black/50 p-6 rounded-lg border border-primary/20 fade-in" style={{ animationDelay: '0.2s' }}>
+            <div className="bg-black/50 p-6 rounded-lg border border-primary/20 glow-red fade-in" style={{ animationDelay: '0.2s' }}>
               <h3 className="font-script text-2xl text-primary mb-4">Formats</h3>
               <ul className="space-y-2 text-gray-300">
                 <li className="flex items-center gap-2"><Users size={16} className="text-primary" /> Cours privés</li>
@@ -280,15 +280,15 @@ function App() {
                   { day: 'Lundi', course: 'Salsa Débutant', time: '19h00 - 20h00' },
                   { day: 'Mercredi', course: 'Salsa Intermédiaire', time: '19h30 - 20h30' },
                 ]},
+                { city: 'Saint-Jean-Eudes', days: [
+                  { day: 'Mercredi', course: 'Rueda de Casino', time: '19h30 - 20h30' },
+                ]},
                 { city: 'Alma', days: [
                   { day: 'Mardi', course: 'Bachata Débutant', time: '18h30 - 19h30' },
                   { day: 'Jeudi', course: 'Salsa Avancé', time: '20h00 - 21h00' },
                 ]},
                 { city: 'Rivière-du-Loup', days: [
                   { day: 'Lundi', course: 'Merengue & Cumbia', time: '19h00 - 20h00' },
-                ]},
-                { city: 'Saint-Jean-Eudes', days: [
-                  { day: 'Mercredi', course: 'Rueda de Casino', time: '19h30 - 20h30' },
                 ]},
               ].map((location, idx) => (
                 <div key={idx} className="bg-secondary p-6 rounded-lg border border-primary/20">
@@ -396,7 +396,7 @@ function App() {
       {/* Section 9: Réseaux sociaux */}
       <section id="reseaux" className="py-20 bg-black">
         <div className="container mx-auto px-6">
-          <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Suivez-nous</h2>
+          <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text glow-red fade-in">Suivez-nous</h2>
           
           <div className="max-w-4xl mx-auto space-y-8">
             <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 fade-in">
@@ -416,31 +416,6 @@ function App() {
                 Visiter notre page
               </a>
             </div>
-
-            {/* Newsletter */}
-            <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 fade-in">
-              <div className="flex items-center gap-4 mb-6">
-                <Send size={32} className="text-primary" />
-                <h3 className="font-script text-3xl text-primary">Infolettre</h3>
-              </div>
-              <p className="text-gray-300 mb-6">
-                Inscrivez-vous à notre infolettre pour recevoir les dernières nouvelles, offres spéciales et invitations exclusives.
-              </p>
-              <form className="flex gap-3" onSubmit={(e) => { e.preventDefault(); alert('Fonctionnalité en cours de développement'); }}>
-                <input 
-                  type="email" 
-                  placeholder="Votre adresse courriel"
-                  className="flex-1 px-4 py-3 rounded-full bg-black border border-primary/30 focus:border-primary focus:outline-none"
-                  required
-                />
-                <button 
-                  type="submit"
-                  className="bg-primary hover:bg-primary-light px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
-                >
-                  S'inscrire
-                </button>
-              </form>
-            </div>
           </div>
         </div>
       </section>
@@ -448,7 +423,7 @@ function App() {
       {/* Section 10: Contact */}
       <section id="contact" className="py-20 bg-gradient-to-b from-black to-secondary">
         <div className="container mx-auto px-6">
-          <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Contactez-nous</h2>
+          <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text">Contactez-nous</h2>
           
           <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
             {/* Contact Info */}
@@ -485,12 +460,13 @@ function App() {
                 <div className="flex items-start gap-4 text-gray-300 pt-4">
                   <MapPin className="text-primary flex-shrink-0" size={24} />
                   <div>
-                    <p className="font-semibold text-white mb-2">Nos studios</p>
+                    <p className="font-semibold text-white mb-2">Nos salles de cours</p>
                     <ul className="space-y-1 text-sm">
                       <li>Jonquière, QC</li>
                       <li>Alma, QC</li>
-                      <li>Rivière-du-Loup, QC</li>
                       <li>Saint-Jean-Eudes, QC</li>
+                      <li>Rivière-du-Loup, QC</li>
+                     
                     </ul>
                   </div>
                 </div>
@@ -498,7 +474,7 @@ function App() {
             </div>
 
             {/* Contact Form */}
-            <div className="bg-black/50 p-8 rounded-lg border border-primary/20 fade-in">
+            <div className="bg-black/50 p-8 rounded-lg border border-primary/20 glow-red fade-in">
               <h3 className="font-script text-3xl text-primary mb-6">Envoyez-nous un message</h3>
               
               <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert('Formulaire soumis ! (Backend en cours de développement)'); }}>
