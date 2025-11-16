@@ -6,6 +6,8 @@ function App() {
   const [scrollY, setScrollY] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isNavFixed, setIsNavFixed] = useState(false);
+  const [showMentionsLegales, setShowMentionsLegales] = useState(false);
+  const [showPolitiqueConfidentialite, setShowPolitiqueConfidentialite] = useState(false);
   const baseUrl = (import.meta.env.BASE_URL) || '/';
 
   // Parallax and scroll handling
@@ -547,12 +549,148 @@ function App() {
             </p>
             
             <div className="flex justify-center gap-6 text-xs text-gray-600">
-              <a href="#" className="hover:text-primary transition">Mentions légales</a>
-              <a href="#" className="hover:text-primary transition">Politique de confidentialité</a>
+              <button onClick={() => setShowMentionsLegales(true)} className="hover:text-primary transition">Mentions légales</button>
+              <button onClick={() => setShowPolitiqueConfidentialite(true)} className="hover:text-primary transition">Politique de confidentialité</button>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Modal Mentions Légales */}
+      {showMentionsLegales && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-6 overflow-y-auto">
+          <div className="bg-secondary rounded-lg p-8 max-w-2xl w-full my-8">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="font-script text-3xl text-primary">Mentions Légales</h2>
+              <button 
+                onClick={() => setShowMentionsLegales(false)}
+                className="text-gray-400 hover:text-white text-2xl"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div className="space-y-6 text-gray-300 max-h-96 overflow-y-auto">
+              <section>
+                <h3 className="text-xl font-semibold text-primary mb-3">1. Informations de l'entreprise</h3>
+                <p><strong>Nom :</strong> Salsa Contigo</p>
+                <p><strong>Téléphone :</strong> 418 512-3484</p>
+                <p><strong>Email :</strong> info@salsacontigo.ca</p>
+              </section>
+
+              <section>
+                <h3 className="text-xl font-semibold text-primary mb-3">2. Propriétaire du site</h3>
+                <p>Ce site web est la propriété et est géré par Ivan Salazar. Tous les droits réservés © 2025.</p>
+              </section>
+
+              <section>
+                <h3 className="text-xl font-semibold text-primary mb-3">3. Conditions d'utilisation</h3>
+                <p>L'accès et l'utilisation de ce site web sont soumis à ces conditions d'utilisation. En accédant au site, vous acceptez d'être lié par ces conditions.</p>
+              </section>
+
+              <section>
+                <h3 className="text-xl font-semibold text-primary mb-3">4. Propriété intellectuelle</h3>
+                <p>Tout contenu, images, textes et logos présents sur ce site sont la propriété exclusive de Salsa Contigo ou de ses fournisseurs de contenu et sont protégés par les lois sur la propriété intellectuelle.</p>
+              </section>
+
+              <section>
+                <h3 className="text-xl font-semibold text-primary mb-3">5. Limitation de responsabilité</h3>
+                <p>Salsa Contigo n'est pas responsable des dommages directs, indirects, accidentels ou consécutifs résultant de l'utilisation ou de l'impossibilité d'utiliser ce site ou ses services.</p>
+              </section>
+
+              <section>
+                <h3 className="text-xl font-semibold text-primary mb-3">6. Crédits</h3>
+                <p><strong>Développement :</strong> Maxime Savard, Développeur Indépendant</p>
+              </section>
+
+              <section>
+                <h3 className="text-xl font-semibold text-primary mb-3">7. Contact pour questions légales</h3>
+                <p>Pour toute question concernant ces mentions légales, veuillez nous contacter à :</p>
+                <p><strong>Email :</strong> info@salsacontigo.ca</p>
+                <p><strong>Téléphone :</strong> 418 512-3484</p>
+              </section>
+            </div>
+
+            <button 
+              onClick={() => setShowMentionsLegales(false)}
+              className="mt-6 w-full bg-primary hover:bg-primary-light px-6 py-3 rounded-full font-semibold transition-all duration-300"
+            >
+              Fermer
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Politique de Confidentialité */}
+      {showPolitiqueConfidentialite && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-6 overflow-y-auto">
+          <div className="bg-secondary rounded-lg p-8 max-w-2xl w-full my-8">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="font-script text-3xl text-primary">Politique de Confidentialité</h2>
+              <button 
+                onClick={() => setShowPolitiqueConfidentialite(false)}
+                className="text-gray-400 hover:text-white text-2xl"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div className="space-y-6 text-gray-300 max-h-96 overflow-y-auto">
+              <section>
+                <h3 className="text-xl font-semibold text-primary mb-3">🛡️ Engagement envers votre vie privée</h3>
+                <p>Chez Salsa Contigo, nous respectons votre vie privée. Nous nous engageons à protéger vos données personnelles et à être transparent sur notre utilisation.</p>
+              </section>
+
+              <section>
+                <h3 className="text-xl font-semibold text-primary mb-3">📊 Données collectées</h3>
+                <p>Lorsque vous nous contactez via le formulaire de contact, nous collectons temporairement :</p>
+                <ul className="list-disc list-inside mt-2 space-y-1">
+                  <li>Votre nom</li>
+                  <li>Votre adresse email</li>
+                  <li>Votre numéro de téléphone</li>
+                  <li>Votre message</li>
+                </ul>
+              </section>
+
+              <section>
+                <h3 className="text-xl font-semibold text-primary mb-3">🔒 Aucun stockage des données</h3>
+                <p className="font-semibold text-primary">✓ Salsa Contigo NE conserve PAS vos données personnelles.</p>
+                <p className="mt-2">Les informations du formulaire de contact sont utilisées uniquement pour vous répondre et ne sont jamais stockées dans nos bases de données. Elles sont supprimées après traitement.</p>
+              </section>
+
+              <section>
+                <h3 className="text-xl font-semibold text-primary mb-3">🍪 Pas de cookies</h3>
+                <p className="font-semibold text-primary">✓ Ce site n'utilise AUCUN cookie.</p>
+                <p className="mt-2">Nous ne suivons pas votre activité, ne placez pas de traceurs, et ne collectons aucune information de navigation. Votre expérience sur notre site est complètement anonyme.</p>
+              </section>
+
+              <section>
+                <h3 className="text-xl font-semibold text-primary mb-3">🔐 Sécurité</h3>
+                <p>Bien que nous ne conservions pas vos données, nous prenons les mesures de sécurité appropriées lors de la transmission de vos informations de contact.</p>
+              </section>
+
+              <section>
+                <h3 className="text-xl font-semibold text-primary mb-3">📬 Contact</h3>
+                <p>Pour toute question concernant cette politique de confidentialité :</p>
+                <p className="mt-2"><strong>Email :</strong> info@salsacontigo.ca</p>
+                <p><strong>Téléphone :</strong> 418 512-3484</p>
+              </section>
+
+              <section>
+                <h3 className="text-xl font-semibold text-primary mb-3">📝 Modifications</h3>
+                <p>Cette politique peut être mise à jour à tout moment. La dernière modification date de novembre 2025.</p>
+              </section>
+            </div>
+
+            <button 
+              onClick={() => setShowPolitiqueConfidentialite(false)}
+              className="mt-6 w-full bg-primary hover:bg-primary-light px-6 py-3 rounded-full font-semibold transition-all duration-300"
+            >
+              Fermer
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
