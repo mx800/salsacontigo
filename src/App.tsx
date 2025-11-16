@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { ChevronDown, Phone, Mail, Facebook, MapPin, Calendar, Users, Music, Instagram, Send, Spotify } from 'lucide-react';
+import { ChevronDown, Phone, Mail, Facebook, MapPin, Calendar, Users, Music, Instagram, Send } from 'lucide-react';
 import './App.css';
 
 function App() {
