@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  salsa-contigo-web:
+    build:
+      context: ./salsa-contigo-website
+      dockerfile: Dockerfile
+    container_name: salsa-contigo-app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./salsa-contigo-website:/app:delegated
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - CI=true
+    working_dir: /app
+    command: ./node_modules/.bin/vite --host 0.0.0.0
+    stdin_open: true
+    tty: true
