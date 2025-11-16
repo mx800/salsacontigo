@@ -103,8 +103,8 @@ function App() {
           <img 
             src={`${baseUrl}images/logo.png`} 
             alt="Salsa Contigo" 
-            className="w-64 md:w-96 mb-8 animate-fade-in"
-            style={{ animationDelay: '0.2s', animationFillMode: 'both' }}
+            className="mb-8 animate-fade-in"
+            style={{ animationDelay: '0.2s', animationFillMode: 'both', width: '600px', maxWidth: '90vw', height: 'auto' }}
           />
           <p 
             className="font-script text-2xl md:text-4xl text-white/90 mb-12 animate-fade-in"
@@ -132,7 +132,7 @@ function App() {
               Notre philosophie repose sur trois piliers : la <strong className="text-primary">Passión</strong> qui anime chaque mouvement, la <strong className="text-primary">Dinámica</strong> qui rythme nos cours, et l'<strong className="text-primary">Elegancia</strong> qui caractérise notre approche pédagogique. Nous croyons que la danse est bien plus qu'une série de pas - c'est une expression de soi, une connexion avec les autres et une célébration de la vie.
             </p>
             <p>
-              Avec des studios à <strong>Jonquière</strong>, <strong>Alma</strong>, <strong>Rivière-du-Loup</strong> et <strong>Saint-Jean-sur-Richelieu</strong>, nous rendons la danse latine accessible à tous, des débutants aux danseurs avancés.
+              Avec des cours à <strong>Jonquière</strong>, <strong>Alma</strong>, <strong>Saint-Jean-Eudes</strong> et <strong>Rivière-du-Loup</strong>, nous rendons la danse latine accessible à tous, des débutants aux danseurs avancés.
             </p>
           </div>
         </div>
@@ -287,7 +287,7 @@ function App() {
                 { city: 'Rivière-du-Loup', days: [
                   { day: 'Lundi', course: 'Merengue & Cumbia', time: '19h00 - 20h00' },
                 ]},
-                { city: 'Saint-Jean-sur-Richelieu', days: [
+                { city: 'Saint-Jean-Eudes', days: [
                   { day: 'Mercredi', course: 'Rueda de Casino', time: '19h30 - 20h30' },
                 ]},
               ].map((location, idx) => (
@@ -490,7 +490,7 @@ function App() {
                       <li>Jonquière, QC</li>
                       <li>Alma, QC</li>
                       <li>Rivière-du-Loup, QC</li>
-                      <li>Saint-Jean-sur-Richelieu, QC</li>
+                      <li>Saint-Jean-Eudes, QC</li>
                     </ul>
                   </div>
                 </div>
