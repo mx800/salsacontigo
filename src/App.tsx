@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { ChevronDown, Phone, Mail, Facebook, MapPin, Calendar, Users, Music, Instagram, Send } from 'lucide-react';
+import { ChevronDown, Phone, Mail, Facebook, MapPin, Calendar, Users, Music, Instagram, Send, Spotify } from 'lucide-react';
 import './App.css';
 
 function App() {
@@ -162,6 +162,11 @@ function App() {
                   <Calendar size={16} className="text-primary" />
                   <span>À venir - Restez à l'écoute</span>
                 </div>
+                <div className="flex items-center gap-2">
+                  <a href="https://www.facebook.com/pages/Salsa-Contigo/146855305346623" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-light transition">
+                    <Facebook size={16} />
+                  </a>
+                </div>
               </div>
               <button className="mt-6 bg-primary hover:bg-primary-light px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
                 En savoir plus
@@ -180,9 +185,6 @@ function App() {
               <div className="flex gap-3 mt-6">
                 <a href="https://www.facebook.com/pages/Salsa-Contigo/146855305346623" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-light transition">
                   <Facebook size={24} />
-                </a>
-                <a href="#" className="text-primary hover:text-primary-light transition">
-                  <Instagram size={24} />
                 </a>
               </div>
             </div>
@@ -354,7 +356,7 @@ function App() {
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Galerie Multimédia</h2>
           
           <div className="max-w-5xl mx-auto">
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto overflow-y-hidden">
               <div className="flex gap-6 pb-4">
                 {[1, 2, 3, 4, 5].map((item) => (
                   <div key={item} className="flex-shrink-0 w-80 h-60 bg-gradient-to-br from-primary/20 to-secondary rounded-lg border border-primary/20 hover:border-primary/50 transition-all duration-300 flex items-center justify-center fade-in">
@@ -396,10 +398,10 @@ function App() {
       {/* Section 9: Réseaux sociaux */}
       <section id="reseaux" className="py-20 bg-black">
         <div className="container mx-auto px-6">
-          <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text glow-red fade-in">Suivez-nous</h2>
+          <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Suivez-nous</h2>
           
           <div className="max-w-4xl mx-auto space-y-8">
-            <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 fade-in">
+            <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 glow-red fade-in">
               <div className="flex items-center gap-4 mb-6">
                 <Facebook size={32} className="text-primary" />
                 <h3 className="font-script text-3xl text-primary">Facebook</h3>
@@ -534,9 +536,6 @@ function App() {
             <div className="flex justify-center gap-6">
               <a href="https://www.facebook.com/pages/Salsa-Contigo/146855305346623" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition">
                 <Facebook size={24} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-primary transition">
-                <Instagram size={24} />
               </a>
               <a href="mailto:info@salsacontigo.ca" className="text-gray-400 hover:text-primary transition">
                 <Mail size={24} />
