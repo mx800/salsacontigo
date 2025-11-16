@@ -6,6 +6,7 @@ function App() {
   const [scrollY, setScrollY] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isNavFixed, setIsNavFixed] = useState(false);
+  const baseUrl = (import.meta.env.BASE_URL) || '/';
 
   // Parallax and scroll handling
   useEffect(() => {
@@ -64,7 +65,7 @@ function App() {
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isNavFixed ? 'nav-fixed' : ''}`}>
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <img src="/images/logo.png" alt="Salsa Contigo" className="h-16 md:h-20" />
+            <img src={`${baseUrl}images/logo.png`} alt="Salsa Contigo" className="h-16 md:h-20" />
             <div className="hidden md:flex space-x-6 text-sm font-medium">
               <button onClick={() => scrollToSection('accueil')} className="hover:text-primary transition">Accueil</button>
               <button onClick={() => scrollToSection('biographie')} className="hover:text-primary transition">Biographie</button>
@@ -90,7 +91,7 @@ function App() {
           }}
         >
           <img 
-            src="/images/background.png" 
+            src={`${baseUrl}images/background.png`} 
             alt="Dancing Couple" 
             className="w-full h-full object-cover"
           />
@@ -100,7 +101,7 @@ function App() {
         {/* Content */}
         <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
           <img 
-            src="/images/logo.png" 
+            src={`${baseUrl}images/logo.png`} 
             alt="Salsa Contigo" 
             className="w-64 md:w-96 mb-8 animate-fade-in"
             style={{ animationDelay: '0.2s', animationFillMode: 'both' }}
@@ -552,7 +553,7 @@ function App() {
       <footer className="bg-black border-t border-primary/20 py-12">
         <div className="container mx-auto px-6">
           <div className="text-center space-y-6">
-            <img src="/images/logo.png" alt="Salsa Contigo" className="h-16 mx-auto opacity-80" />
+            <img src={`${baseUrl}images/logo.png`} alt="Salsa Contigo" className="h-16 mx-auto opacity-80" />
             
             <div className="flex justify-center gap-6">
               <a href="https://www.facebook.com/pages/Salsa-Contigo/146855305346623" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition">
