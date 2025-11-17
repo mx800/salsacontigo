@@ -8,6 +8,7 @@ function App() {
   const [isNavFixed, setIsNavFixed] = useState(false);
   const [showMentionsLegales, setShowMentionsLegales] = useState(false);
   const [showPolitiqueConfidentialite, setShowPolitiqueConfidentialite] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const baseUrl = (import.meta.env.BASE_URL) || '/';
 
   // Parallax and scroll handling
@@ -68,6 +69,8 @@ function App() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <img src={`${baseUrl}images/logo.png`} alt="Salsa Contigo" className="h-16 md:h-20" />
+
+            {/* Desktop Menu */}
             <div className="hidden md:flex space-x-6 text-sm font-medium">
               <button onClick={() => scrollToSection('accueil')} className="hover:text-primary transition">Accueil</button>
               <button onClick={() => scrollToSection('biographie')} className="hover:text-primary transition">Biographie</button>
@@ -79,7 +82,39 @@ function App() {
               <button onClick={() => scrollToSection('spotify')} className="hover:text-primary transition">Musique</button>
               <button onClick={() => scrollToSection('contact')} className="hover:text-primary transition">Contact</button>
             </div>
+
+            {/* Mobile Hamburger Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden text-white hover:text-primary transition p-2"
+              aria-label="Menu"
+            >
+              <div className="w-6 h-6 relative">
+                <span className={`block absolute h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${isMobileMenuOpen ? 'rotate-45 translate-y-0' : '-translate-y-2'}`}></span>
+                <span className={`block absolute h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'} translate-y-0`}></span>
+                <span className={`block absolute h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${isMobileMenuOpen ? '-rotate-45 translate-y-0' : 'translate-y-2'}`}></span>
+              </div>
+            </button>
           </div>
+
+          {/* Mobile Menu Overlay */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-sm border-t border-primary/20">
+              <div className="container mx-auto px-6 py-4">
+                <nav className="flex flex-col space-y-4 text-sm font-medium">
+                  <button onClick={() => { scrollToSection('accueil'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Accueil</button>
+                  <button onClick={() => { scrollToSection('biographie'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Biographie</button>
+                  <button onClick={() => { scrollToSection('evenements'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Événements</button>
+                  <button onClick={() => { scrollToSection('cours'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Cours</button>
+                  <button onClick={() => { scrollToSection('inscriptions'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Inscriptions</button>
+                  <button onClick={() => { scrollToSection('professeurs'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Professeurs</button>
+                  <button onClick={() => { scrollToSection('multimedia'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Multimédia</button>
+                  <button onClick={() => { scrollToSection('spotify'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Musique</button>
+                  <button onClick={() => { scrollToSection('contact'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Contact</button>
+                </nav>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
