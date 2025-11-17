@@ -134,7 +134,7 @@ function App() {
               Notre philosophie repose sur trois piliers : la <strong className="text-primary">Passión</strong> qui anime chaque mouvement, la <strong className="text-primary">Dinámica</strong> qui rythme nos cours, et l'<strong className="text-primary">Elegancia</strong> qui caractérise notre approche pédagogique. Nous croyons que la danse est bien plus qu'une série de pas - c'est une expression de soi, une connexion avec les autres et une célébration de la vie.
             </p>
             <p>
-              Avec des cours à <strong>Jonquière</strong>, <strong>Alma</strong>, <strong>Saint-Jean-Eudes</strong> et <strong>Rivière-du-Loup</strong>, nous rendons la danse latine accessible à tous, des débutants aux danseurs avancés.
+              Avec des cours à <strong>Jonquière</strong>, <strong>Alma</strong>, <strong>Saint-Jean-Eudes</strong> et <strong>Rivière-du-Loup</strong>, nous rendons la danse latine accessible au Saguenay, des débutants aux danseurs avancés.
             </p>
           </div>
         </div>
@@ -197,8 +197,14 @@ function App() {
       {/* Section 4: Cours et Formations */}
       <section id="cours" className="py-20 bg-gradient-to-b from-black to-secondary">
         <div className="container mx-auto px-6">
-          <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Cours & Formations</h2>
-          
+          <h2 className="font-script text-5xl md:text-6xl text-center mb-8 gradient-text fade-in">Cours & Formations</h2>
+
+          <div className="max-w-3xl mx-auto mb-12 bg-gradient-to-r from-primary/10 to-primary/5 p-8 rounded-lg border border-primary/30 fade-in">
+            <p className="text-gray-300 leading-relaxed text-center">
+              Nos cours sont accessibles aussi bien aux couples passionnés qu'aux personnes seules cherchant à explorer la danse latine. C'est une excellente façon de socialiser et de créer de nouveaux liens tout en s'amusant aux rythmes endiablés !
+            </p>
+          </div>
+
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
             {/* Dance Styles */}
             <div className="bg-black/50 p-6 rounded-lg border border-primary/20 glow-red fade-in">
@@ -335,6 +341,7 @@ function App() {
             {[
               { name: 'Carlos Rodriguez', specialty: 'Salsa & Rueda' },
               { name: 'Maria Sanchez', specialty: 'Bachata & Cha-Cha' },
+              { name: 'Diego Martinez', specialty: 'Merengue & Cumbia' },
               { name: 'Diego Martinez', specialty: 'Merengue & Cumbia' },
               { name: 'Isabella Torres', specialty: 'Salsa Avancée' },
             ].map((instructor, idx) => (
