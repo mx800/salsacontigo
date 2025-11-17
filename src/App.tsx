@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { ChevronDown, Phone, Mail, Facebook, MapPin, Calendar, Users, Music, Instagram, Send } from 'lucide-react';
+import { useIsMobile } from './hooks/use-mobile';
 import './App.css';
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
   const [showMentionsLegales, setShowMentionsLegales] = useState(false);
   const [showPolitiqueConfidentialite, setShowPolitiqueConfidentialite] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isMobile = useIsMobile();
   const baseUrl = (import.meta.env.BASE_URL) || '/';
 
   // Parallax and scroll handling
@@ -65,7 +67,7 @@ function App() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent ${isNavFixed ? 'nav-fixed' : ''}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent ${isNavFixed || isMobile ? 'nav-fixed' : ''}`}>
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <img src={`${baseUrl}images/logo.png`} alt="Salsa Contigo" className="h-16 md:h-20" />
