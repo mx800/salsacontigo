@@ -438,7 +438,7 @@ function App() {
         </div>
       </section>
 
-      {/* Section 7: Multimédias - DYNAMIQUE */}
+      {/* Section 7: Multimédias */}
       <section id="multimedia" className="py-20 bg-black">
         <div className="container mx-auto px-6">
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Galerie Multimédia</h2>
@@ -459,9 +459,7 @@ function App() {
                         loading="lazy"
                       />
                       {/* Overlay au survol */}
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <Music size={32} className="text-primary drop-shadow-lg" />
-                      </div>
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"></div>
                     </div>
                   ))}
                 </div>
@@ -520,7 +518,7 @@ function App() {
                   className="fb-page"
                   data-href="https://www.facebook.com/salsacontigo.ca/"
                   data-tabs="timeline"
-                  data-width={isMobile ? "300" : "500"} 
+                  data-width={isMobile ? "330" : "500"} 
                   data-height="352"
                   data-small-header="true"
                   data-adapt-container-width="true"
