@@ -3,6 +3,7 @@ import { ChevronDown, Phone, Mail, Facebook, MapPin, Calendar, Users, Music, Ins
 import { useIsMobile } from './hooks/use-mobile';
 import './App.css';
 import schedules from './data/schedules.json';
+import featuredEvents from './data/featuredEvents.json';
 
 function App() {
   const [scrollY, setScrollY] = useState(0);
@@ -184,50 +185,52 @@ function App() {
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Événements Vedettes</h2>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Featured Event */}
-            <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 hover:border-primary/50 transition-all duration-300 glow-red fade-in">
-              <div className="flex items-center gap-3 mb-4">
-                <Calendar className="text-primary" size={24} />
-                <h3 className="font-script text-3xl text-primary">La Grande Soirée ROUGE & BLANC</h3>
-              </div>
-              <p className="text-gray-300 mb-4">
-                Rejoignez-nous pour une soirée inoubliable de danse, de musique et de plaisir ! Portez vos plus beaux habits rouges et blancs et dansez toute la nuit sur les rythmes endiablés de la salsa, bachata, et merengue.
-              </p>
-              <div className="space-y-2 text-sm text-gray-400">
-                <div className="flex items-center gap-2">
-                  <MapPin size={16} className="text-primary" />
-                  <span>Jonquière, QC</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar size={16} className="text-primary" />
-                  <span>À venir - Restez à l'écoute</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <a href="https://www.facebook.com/pages/Salsa-Contigo/146855305346623" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-light transition">
-                    <Facebook size={16} />
-                  </a>
-                </div>
-              </div>
-              <button className="mt-6 bg-primary hover:bg-primary-light px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
-                En savoir plus
-              </button>
-            </div>
+            {featuredEvents.map((event, idx) => {
+              const iconMap = { Calendar, Users, MapPin, Facebook };
+              const MainIcon = iconMap[event.icon as keyof typeof iconMap];
 
-            {/* Social Event Promo */}
-            <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 hover:border-primary/50 transition-all duration-300 glow-red fade-in">
-              <div className="flex items-center gap-3 mb-4">
-                <Users className="text-primary" size={24} />
-                <h3 className="font-script text-3xl text-primary">Soirées Sociales</h3>
-              </div>
-              <p className="text-gray-300 mb-4">
-                Chaque mois, nous organisons des soirées sociales où nos élèves peuvent pratiquer leurs nouveaux mouvements dans une ambiance décontractée et festive. Parfait pour rencontrer d'autres passionnés de danse !
-              </p>
-              <div className="flex gap-3 mt-6">
-                <a href="https://www.facebook.com/pages/Salsa-Contigo/146855305346623" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-light transition">
-                  <Facebook size={24} />
-                </a>
-              </div>
-            </div>
+              return (
+                <div key={idx} className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 hover:border-primary/50 transition-all duration-300 glow-red fade-in">
+                  <div className="flex items-center gap-3 mb-4">
+                    {MainIcon && <MainIcon className="text-primary" size={24} />}
+                    <h3 className="font-script text-3xl text-primary">{event.title}</h3>
+                  </div>
+                  <p className="text-gray-300 mb-4">
+                    {event.description}
+                  </p>
+                  
+                  <div className="space-y-2 text-sm text-gray-400">
+                    {event.details.map((detail, detailIdx) => {
+                      const DetailIcon = iconMap[detail.icon as keyof typeof iconMap];
+                      const iconSize = 16;
+                      
+                      return (
+                        <div key={detailIdx} className="flex items-center gap-2">
+                          {DetailIcon && <DetailIcon size={iconSize} className="text-primary" />}
+                          <span>{detail.content}</span>
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  {event.buttonText && event.buttonLink && (
+                    <a 
+                      href={event.buttonLink}
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-block mt-6 bg-primary hover:bg-primary-light px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+                    >
+                      {event.buttonText}
+                    </a>
+                  )}
+                  {event.buttonText && !event.buttonLink && (
+                    <button className="mt-6 bg-primary hover:bg-primary-light px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
+                      {event.buttonText}
+                    </button>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -319,7 +322,7 @@ function App() {
             </div>
 
             {/* Schedule by City */}
-            <div className="space-y-6 fade-in">
+            <div className="space-y-6 fade-in"> 
               <h3 className="font-script text-3xl text-primary text-center mb-8">Horaires par ville</h3>
               
               {/* City Schedule Cards */}

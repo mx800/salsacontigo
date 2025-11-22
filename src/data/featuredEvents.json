@@ -1,0 +1,21 @@
+[
+  {
+    "icon": "Calendar",
+    "title": "La Grande Soirée ROUGE & BLANC",
+    "description": "Rejoignez-nous pour une soirée inoubliable de danse, de musique et de plaisir ! Portez vos plus beaux habits rouges et blancs et dansez toute la nuit sur les rythmes endiablés de la salsa, bachata, et merengue.",
+    "details": [
+      { "type": "text", "icon": "MapPin", "content": "Jonquière, QC" },
+      { "type": "text", "icon": "Calendar", "content": "À venir - Restez à l'écoute" }
+    ],
+    "buttonText": "En savoir plus",
+    "buttonLink": "https://www.facebook.com/share/p/16pcLvAefV/"
+  },
+  {
+    "icon": "Users",
+    "title": "Soirées Sociales",
+    "description": "Chaque mois, nous organisons des soirées sociales où nos élèves peuvent pratiquer leurs nouveaux mouvements dans une ambiance décontractée et festive. Parfait pour rencontrer d'autres passionnés de danse !",
+    "details": [],
+    "buttonText": "Voir sur Facebook",
+    "buttonLink": "https://www.facebook.com/pages/Salsa-Contigo/146855305346623"
+  }
+]
