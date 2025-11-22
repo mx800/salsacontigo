@@ -466,7 +466,7 @@ function App() {
         </div>
       </section>
 
-      {/* Section 7: Multimédias AVEC ICÔNE ROUGE */}
+      {/* Section 7: Multimédias */}
       <section id="multimedia" className="py-20 bg-black">
         <div className="container mx-auto px-6">
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Galerie Multimédia</h2>
