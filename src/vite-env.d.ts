@@ -6,3 +6,7 @@ interface ImportMeta {
     readonly MODE: string;
   };
 }
+
+interface Window {
+  FB?: any;
+}
