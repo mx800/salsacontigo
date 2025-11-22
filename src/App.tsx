@@ -428,11 +428,11 @@ function App() {
             <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 glow-red fade-in">
               <div className="flex items-center gap-4 mb-6">
                 <Music size={32} className="text-primary" />
-                <h3 className="font-script text-3xl text-primary">Notre Playlist</h3>
+                <h3 className="font-script text-3xl text-primary">Notre Musique</h3>
               </div>
               <iframe
                 className="rounded-lg w-full"
-                src="https://open.spotify.com/embed/playlist/37i9dQZF1DX0rgAD2A8y23?utm_source=generator&theme=0"
+                src="https://open.spotify.com/embed/playlist/0x5sdZSd4GbYmAucCshEsO?utm_source=generator&theme=0"
                 height="352"
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                 loading="lazy"
