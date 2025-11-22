@@ -85,12 +85,16 @@ function App() {
     tryParseFb();
   }, []);
 
-   useEffect(() => {
-    if (window.FB) {
-      setTimeout(() => {
-        window.FB.XFBML.parse();
-      }, 200);
-    }
+  useEffect(() => {
+    const tryParseFb = () => {
+      const w = window as any;
+      if (w.FB && typeof w.FB.XFBML?.parse === 'function') {
+        w.FB.XFBML.parse();
+      } else {
+        setTimeout(tryParseFb, 500);
+      }
+    };
+    tryParseFb();
   }, [isMobile]);
 
   const scrollToSection = (id: string) => {
