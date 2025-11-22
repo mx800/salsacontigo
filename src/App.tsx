@@ -15,6 +15,9 @@ function App() {
   const isMobile = useIsMobile();
   const baseUrl = (import.meta.env.BASE_URL) || '/';
 
+  // Vérification s'il y a des événements à afficher
+  const hasEvents = featuredEvents && featuredEvents.length > 0;
+
   // Parallax and scroll handling
   useEffect(() => {
     const handleScroll = () => {
@@ -61,8 +64,10 @@ function App() {
   // Re-parse Facebook plugin
   useEffect(() => {
     const tryParseFb = () => {
-      if ((window as any).FB) {
-        (window as any).FB.XFBML.parse();
+      // @ts-ignore
+      if (window.FB) {
+        // @ts-ignore
+        window.FB.XFBML.parse();
       } else {
         // If the SDK is not yet loaded, try again shortly
         setTimeout(tryParseFb, 500);
@@ -91,7 +96,12 @@ function App() {
             <div className="hidden md:flex space-x-6 text-sm font-medium">
               <button onClick={() => scrollToSection('accueil')} className="hover:text-primary transition">Accueil</button>
               <button onClick={() => scrollToSection('biographie')} className="hover:text-primary transition">Biographie</button>
-              <button onClick={() => scrollToSection('evenements')} className="hover:text-primary transition">Événements</button>
+              
+              {/* Affiche le bouton seulement s'il y a des événements */}
+              {hasEvents && (
+                <button onClick={() => scrollToSection('evenements')} className="hover:text-primary transition">Événements</button>
+              )}
+
               <button onClick={() => scrollToSection('cours')} className="hover:text-primary transition">Cours</button>
               <button onClick={() => scrollToSection('inscriptions')} className="hover:text-primary transition">Inscriptions</button>
               <button onClick={() => scrollToSection('professeurs')} className="hover:text-primary transition">Professeurs</button>
@@ -121,7 +131,12 @@ function App() {
                 <nav className="flex flex-col space-y-4 text-sm font-medium">
                   <button onClick={() => { scrollToSection('accueil'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Accueil</button>
                   <button onClick={() => { scrollToSection('biographie'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Biographie</button>
-                  <button onClick={() => { scrollToSection('evenements'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Événements</button>
+                  
+                  {/* Mobile Nav Conditionnelle */}
+                  {hasEvents && (
+                    <button onClick={() => { scrollToSection('evenements'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Événements</button>
+                  )}
+
                   <button onClick={() => { scrollToSection('cours'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Cours</button>
                   <button onClick={() => { scrollToSection('inscriptions'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Inscriptions</button>
                   <button onClick={() => { scrollToSection('professeurs'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Professeurs</button>
@@ -192,61 +207,63 @@ function App() {
         </div>
       </section>
 
-      {/* Section 3: Événements vedettes */}
-      <section id="evenements" className="py-20 bg-black">
-        <div className="container mx-auto px-6">
-          <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Événements Vedettes</h2>
-          
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {featuredEvents.map((event, idx) => {
-              const iconMap = { Calendar, Users, MapPin, Facebook };
-              const MainIcon = iconMap[event.icon as keyof typeof iconMap];
+      {/* Section 3: Événements vedettes - RENDERING CONDITIONNEL */}
+      {hasEvents && (
+        <section id="evenements" className="py-20 bg-black">
+          <div className="container mx-auto px-6">
+            <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Événements Vedettes</h2>
+            
+            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              {featuredEvents.map((event, idx) => {
+                const iconMap = { Calendar, Users, MapPin, Facebook };
+                const MainIcon = iconMap[event.icon as keyof typeof iconMap];
 
-              return (
-                <div key={idx} className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 hover:border-primary/50 transition-all duration-300 glow-red fade-in">
-                  <div className="flex items-center gap-3 mb-4">
-                    {MainIcon && <MainIcon className="text-primary" size={24} />}
-                    <h3 className="font-script text-3xl text-primary">{event.title}</h3>
-                  </div>
-                  <p className="text-gray-300 mb-4">
-                    {event.description}
-                  </p>
-                  
-                  <div className="space-y-2 text-sm text-gray-400">
-                    {event.details.map((detail, detailIdx) => {
-                      const DetailIcon = iconMap[detail.icon as keyof typeof iconMap];
-                      const iconSize = 16;
-                      
-                      return (
-                        <div key={detailIdx} className="flex items-center gap-2">
-                          {DetailIcon && <DetailIcon size={iconSize} className="text-primary" />}
-                          <span>{detail.content}</span>
-                        </div>
-                      )
-                    })}
-                  </div>
+                return (
+                  <div key={idx} className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 hover:border-primary/50 transition-all duration-300 glow-red fade-in">
+                    <div className="flex items-center gap-3 mb-4">
+                      {MainIcon && <MainIcon className="text-primary" size={24} />}
+                      <h3 className="font-script text-3xl text-primary">{event.title}</h3>
+                    </div>
+                    <p className="text-gray-300 mb-4">
+                      {event.description}
+                    </p>
+                    
+                    <div className="space-y-2 text-sm text-gray-400">
+                      {event.details.map((detail, detailIdx) => {
+                        const DetailIcon = iconMap[detail.icon as keyof typeof iconMap];
+                        const iconSize = 16;
+                        
+                        return (
+                          <div key={detailIdx} className="flex items-center gap-2">
+                            {DetailIcon && <DetailIcon size={iconSize} className="text-primary" />}
+                            <span>{detail.content}</span>
+                          </div>
+                        )
+                      })}
+                    </div>
 
-                  {event.buttonText && event.buttonLink && (
-                    <a 
-                      href={event.buttonLink}
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="inline-block mt-6 bg-primary hover:bg-primary-light px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
-                    >
-                      {event.buttonText}
-                    </a>
-                  )}
-                  {event.buttonText && !event.buttonLink && (
-                    <button className="mt-6 bg-primary hover:bg-primary-light px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
-                      {event.buttonText}
-                    </button>
-                  )}
-                </div>
-              );
-            })}
+                    {event.buttonText && event.buttonLink && (
+                      <a 
+                        href={event.buttonLink}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-block mt-6 bg-primary hover:bg-primary-light px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+                      >
+                        {event.buttonText}
+                      </a>
+                    )}
+                    {event.buttonText && !event.buttonLink && (
+                      <button className="mt-6 bg-primary hover:bg-primary-light px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
+                        {event.buttonText}
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Section 4: Cours et Formations */}
       <section id="cours" className="py-20 bg-gradient-to-b from-black to-secondary">
@@ -425,18 +442,26 @@ function App() {
 
           <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
             {/* Spotify Player */}
-            <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 glow-red fade-in">
+            <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 glow-red fade-in transition-transform hover:scale-[1.01]">
               <div className="flex items-center gap-4 mb-6">
-                <Music size={32} className="text-primary" />
-                <h3 className="font-script text-3xl text-primary">Notre Musique</h3>
+                <div className="p-3 bg-primary/10 rounded-full">
+                  <Music size={32} className="text-primary animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="font-script text-3xl text-primary">Notre Musique</h3>
+                  <p className="text-gray-400 text-sm">L'ambiance Salsa Contigo</p>
+                </div>
               </div>
-              <iframe
-                className="rounded-lg w-full"
-                src="https://open.spotify.com/embed/playlist/0x5sdZSd4GbYmAucCshEsO?utm_source=generator&theme=0"
-                height="352"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
-              ></iframe>
+              <div className="w-full overflow-hidden rounded-lg shadow-lg bg-black/50">
+                <iframe
+                  className="w-full border-0"
+                  style={{ borderRadius: '12px' }}
+                  src="https://open.spotify.com/embed/playlist/0x5sdZSd4GbYmAucCshEsO?utm_source=generator&theme=0"
+                  height="352"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                ></iframe>
+              </div>
             </div>
 
             {/* Facebook Page */}
@@ -448,17 +473,19 @@ function App() {
               </div>
 
               {/* Conteneur du plugin (Centré) */}
-              <div className="w-full flex justify-center overflow-hidden"> 
+              <div className="w-full flex justify-center overflow-hidden bg-white/5 rounded-lg p-2"> 
                 <div
                   className="fb-page"
                   data-href="https://www.facebook.com/salsacontigo.ca/"
                   data-tabs="timeline"
                   data-width="500"
                   data-height="352"
-                  data-small-header="true"
+                  data-small-header="false"
                   data-adapt-container-width="true"
-                  data-hide-cover="true"
-                  data-show-facepile="false"
+                  data-hide-cover="false"
+                  data-show-facepile="true"
+                  data-lazy="true"
+                  data-colorscheme="dark"
                 >
                   <blockquote cite="https://www.facebook.com/salsacontigo.ca/" className="fb-xfbml-parse-ignore">
                     <a href="https://www.facebook.com/salsacontigo.ca/">Salsa Contigo</a>
