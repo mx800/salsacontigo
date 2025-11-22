@@ -9,7 +9,6 @@ import schedules from './data/schedules.json';
 import featuredEvents from './data/featuredEvents.json';
 
 // --- CONFIGURATION GALERIE DYNAMIQUE ---
-// Récupère toutes les images situées dans src/assets/gallery
 const galleryImports = import.meta.glob('./assets/gallery/*.{png,jpg,jpeg,webp}', { 
   eager: true, 
   as: 'url' 
@@ -29,7 +28,6 @@ function App() {
   // --- STATE LIGHTBOX (GALERIE) ---
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  // Vérification s'il y a des événements à afficher
   const hasEvents = featuredEvents && featuredEvents.length > 0;
 
   // Parallax and scroll handling
@@ -55,7 +53,7 @@ function App() {
     };
   }, []);
 
-  // Fade-in animation on scroll
+  // Fade-in animation
   useEffect(() => {
     const observerOptions = {
       threshold: 0.1,
@@ -75,7 +73,7 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
-  // Re-parse Facebook plugin
+  // Facebook plugin
   useEffect(() => {
     const tryParseFb = () => {
       // @ts-ignore
@@ -104,12 +102,12 @@ function App() {
   // --- LOGIQUE LIGHTBOX ---
   const openLightbox = (index: number) => {
     setLightboxIndex(index);
-    document.body.style.overflow = 'hidden'; // Bloque le scroll
+    document.body.style.overflow = 'hidden';
   };
 
   const closeLightbox = () => {
     setLightboxIndex(null);
-    document.body.style.overflow = 'unset'; // Réactive le scroll
+    document.body.style.overflow = 'unset';
   };
 
   const nextImage = (e?: React.MouseEvent) => {
@@ -126,16 +124,13 @@ function App() {
     );
   };
 
-  // Gestion Clavier Lightbox
   useEffect(() => {
     if (lightboxIndex === null) return;
-
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowRight') nextImage();
       if (e.key === 'ArrowLeft') prevImage();
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [lightboxIndex]);
@@ -148,23 +143,45 @@ function App() {
     }
   };
 
+  // --- PRÉPARATION DU CAROUSSEL INFINI ---
+  const displayImages = [...galleryImages, ...galleryImages];
+
   return (
     <div className="min-h-screen bg-black text-white">
+      
+      {/* Styles injectés pour l'animation et le masque */}
+      <style>{`
+        @keyframes scroll-left {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        /* Animation ralentie à 80s (au lieu de 40s) */
+        .animate-scroll {
+          animation: scroll-left 80s linear infinite;
+          width: max-content;
+        }
+        .animate-scroll:hover {
+          animation-play-state: paused;
+        }
+        /* Masque dégradé pour les bords gauche et droit */
+        .carousel-mask {
+          mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+      `}</style>
+
       {/* Navigation */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent ${isNavFixed || isMobile ? 'nav-fixed' : ''}`}>
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <img src={`${baseUrl}images/logo.png`} alt="Salsa Contigo" className="h-16 md:h-20" />
 
-            {/* Desktop Menu */}
             <div className="hidden md:flex space-x-6 text-sm font-medium">
               <button onClick={() => scrollToSection('accueil')} className="hover:text-primary transition">Accueil</button>
               <button onClick={() => scrollToSection('biographie')} className="hover:text-primary transition">Biographie</button>
-              
               {hasEvents && (
                 <button onClick={() => scrollToSection('evenements')} className="hover:text-primary transition">Événements</button>
               )}
-
               <button onClick={() => scrollToSection('cours')} className="hover:text-primary transition">Cours</button>
               <button onClick={() => scrollToSection('inscriptions')} className="hover:text-primary transition">Inscriptions</button>
               <button onClick={() => scrollToSection('professeurs')} className="hover:text-primary transition">Professeurs</button>
@@ -173,11 +190,9 @@ function App() {
               <button onClick={() => scrollToSection('contact')} className="hover:text-primary transition">Contact</button>
             </div>
 
-            {/* Mobile Hamburger Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden text-white hover:text-primary transition p-2"
-              aria-label="Menu"
             >
               <div className="w-6 h-6 relative">
                 <span className={`block absolute h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${isMobileMenuOpen ? 'rotate-45 translate-y-0' : '-translate-y-2'}`}></span>
@@ -187,18 +202,15 @@ function App() {
             </button>
           </div>
 
-          {/* Mobile Menu Overlay */}
           {isMobileMenuOpen && (
             <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-sm border-t border-primary/20">
               <div className="container mx-auto px-6 py-4">
                 <nav className="flex flex-col space-y-4 text-sm font-medium">
                   <button onClick={() => { scrollToSection('accueil'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Accueil</button>
                   <button onClick={() => { scrollToSection('biographie'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Biographie</button>
-                  
                   {hasEvents && (
                     <button onClick={() => { scrollToSection('evenements'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Événements</button>
                   )}
-
                   <button onClick={() => { scrollToSection('cours'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Cours</button>
                   <button onClick={() => { scrollToSection('inscriptions'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Inscriptions</button>
                   <button onClick={() => { scrollToSection('professeurs'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Professeurs</button>
@@ -212,7 +224,7 @@ function App() {
         </div>
       </nav>
 
-      {/* Section 1: Hero with Parallax */}
+      {/* Section 1: Hero */}
       <section id="accueil" className="relative h-screen overflow-hidden">
         <div 
           className="absolute inset-0 parallax-layer"
@@ -267,7 +279,7 @@ function App() {
         </div>
       </section>
 
-      {/* Section 3: Événements vedettes */}
+      {/* Section 3: Événements */}
       {hasEvents && (
         <section id="evenements" className="py-20 bg-black">
           <div className="container mx-auto px-6">
@@ -288,7 +300,6 @@ function App() {
                     <p className="text-gray-300 mb-4">
                       {event.description}
                     </p>
-                    
                     <div className="space-y-2 text-sm text-gray-400">
                       {event.details.map((detail, detailIdx) => {
                         // @ts-ignore
@@ -302,8 +313,7 @@ function App() {
                         )
                       })}
                     </div>
-
-                    {event.buttonText && event.buttonLink && (
+                    {event.buttonText && event.buttonLink ? (
                       <a 
                         href={event.buttonLink}
                         target="_blank" 
@@ -312,12 +322,11 @@ function App() {
                       >
                         {event.buttonText}
                       </a>
-                    )}
-                    {event.buttonText && !event.buttonLink && (
+                    ) : event.buttonText ? (
                       <button className="mt-6 bg-primary hover:bg-primary-light px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
                         {event.buttonText}
                       </button>
-                    )}
+                    ) : null}
                   </div>
                 );
               })}
@@ -326,7 +335,7 @@ function App() {
         </section>
       )}
 
-      {/* Section 4: Cours et Formations */}
+      {/* Section 4: Cours */}
       <section id="cours" className="py-20 bg-gradient-to-b from-black to-secondary">
         <div className="container mx-auto px-6">
           <h2 className="font-script text-5xl md:text-6xl text-center mb-8 gradient-text fade-in">Cours & Formations</h2>
@@ -380,7 +389,7 @@ function App() {
         </div>
       </section>
 
-      {/* Section 5: Inscriptions & Sessions */}
+      {/* Section 5: Inscriptions */}
       <section id="inscriptions" className="py-20 bg-black">
         <div className="container mx-auto px-6">
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Inscriptions & Sessions</h2>
@@ -466,40 +475,41 @@ function App() {
         </div>
       </section>
 
-      {/* Section 7: Multimédias */}
-      <section id="multimedia" className="py-20 bg-black">
-        <div className="container mx-auto px-6">
+      {/* Section 7: Multimédias - CAROUSSEL FLUIDE AVEC MASQUE */}
+      <section id="multimedia" className="py-20 bg-black overflow-hidden">
+        <div className="container-fluid">
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Galerie Multimédia</h2>
-          <div className="max-w-full mx-auto">
+          
+          {/* Ajout de la classe carousel-mask ici */}
+          <div className="w-full relative overflow-hidden carousel-mask">
             {galleryImages.length > 0 ? (
-              <div className="overflow-x-auto overflow-y-hidden pb-4">
-                <div className="flex gap-6" style={{ width: 'max-content' }}>
-                  {galleryImages.map((imgSrc, idx) => (
-                    <div 
-                      key={idx} 
-                      onClick={() => openLightbox(idx)}
-                      className="relative flex-shrink-0 w-80 h-60 rounded-lg overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 group fade-in cursor-pointer"
-                    >
-                      <img 
-                        src={imgSrc} 
-                        alt={`Salsa Contigo Galerie ${idx}`}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        loading="lazy"
-                      />
-                      {/* Overlay au survol avec Icône Rouge (text-primary) */}
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <div className="p-3 border-2 border-primary rounded-full text-primary hover:bg-primary/20 transition-all transform hover:scale-110">
-                          <Maximize2 size={28} />
-                        </div>
+              <div className="flex gap-6 animate-scroll">
+                {displayImages.map((imgSrc, idx) => (
+                  <div 
+                    key={idx} 
+                    onClick={() => openLightbox(idx % galleryImages.length)}
+                    className="relative flex-shrink-0 w-80 h-60 rounded-lg overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 group cursor-pointer"
+                  >
+                    <img 
+                      src={imgSrc} 
+                      alt={`Salsa Contigo Galerie`}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <div className="p-3 border-2 border-primary rounded-full text-primary hover:bg-primary/20 transition-all transform hover:scale-110">
+                        <Maximize2 size={28} />
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             ) : (
-              <div className="text-center p-8 border border-dashed border-gray-700 rounded-lg">
-                <Music size={48} className="text-gray-700 mx-auto mb-4" />
-                <p className="text-gray-500">Ajoutez des photos dans src/assets/gallery pour les voir ici.</p>
+              <div className="container mx-auto px-6">
+                <div className="text-center p-8 border border-dashed border-gray-700 rounded-lg">
+                  <Music size={48} className="text-gray-700 mx-auto mb-4" />
+                  <p className="text-gray-500">Ajoutez des photos dans src/assets/gallery pour les voir ici.</p>
+                </div>
               </div>
             )}
           </div>
@@ -698,7 +708,6 @@ function App() {
           className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={closeLightbox}
         >
-          {/* Bouton Fermer */}
           <button 
             onClick={closeLightbox}
             className="absolute top-4 right-4 text-white/70 hover:text-primary transition p-2 z-50"
@@ -706,7 +715,6 @@ function App() {
             <X size={40} />
           </button>
 
-          {/* Bouton Précédent */}
           <button 
             onClick={prevImage}
             className="absolute left-2 md:left-8 text-white/70 hover:text-primary transition p-2 z-50 bg-black/20 hover:bg-black/50 rounded-full"
@@ -714,7 +722,6 @@ function App() {
             <ChevronLeft size={40} />
           </button>
 
-          {/* Image Centrale */}
           <div 
             className="relative max-w-[95vw] max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
@@ -729,7 +736,6 @@ function App() {
             </p>
           </div>
 
-          {/* Bouton Suivant */}
           <button 
             onClick={nextImage}
             className="absolute right-2 md:right-8 text-white/70 hover:text-primary transition p-2 z-50 bg-black/20 hover:bg-black/50 rounded-full"
@@ -752,7 +758,6 @@ function App() {
                 ✕
               </button>
             </div>
-            
             <div className="space-y-6 text-gray-300 max-h-96 overflow-y-auto">
               <section>
                 <h3 className="text-xl font-semibold text-primary mb-3">1. Informations de l'entreprise</h3>
@@ -787,7 +792,6 @@ function App() {
                 <p><strong>Téléphone :</strong> 418 512-3484</p>
               </section>
             </div>
-
             <button 
               onClick={() => setShowMentionsLegales(false)}
               className="mt-6 w-full bg-primary hover:bg-primary-light px-6 py-3 rounded-full font-semibold transition-all duration-300"
@@ -811,7 +815,6 @@ function App() {
                 ✕
               </button>
             </div>
-            
             <div className="space-y-6 text-gray-300 max-h-96 overflow-y-auto">
               <section>
                 <h3 className="text-xl font-semibold text-primary mb-3">🛡️ Engagement envers votre vie privée</h3>
@@ -852,7 +855,6 @@ function App() {
                 <p>Cette politique peut être mise à jour à tout moment. La dernière modification date de novembre 2025.</p>
               </section>
             </div>
-
             <button 
               onClick={() => setShowPolitiqueConfidentialite(false)}
               className="mt-6 w-full bg-primary hover:bg-primary-light px-6 py-3 rounded-full font-semibold transition-all duration-300"
