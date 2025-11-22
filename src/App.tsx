@@ -419,15 +419,25 @@ function App() {
       <section id="multimedia" className="py-20 bg-black">
         <div className="container mx-auto px-6">
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Galerie Multimédia</h2>
-          
+
           <div className="max-w-5xl mx-auto">
             <div className="overflow-x-auto overflow-y-hidden">
               <div className="flex gap-6 pb-4">
-                {[1, 2, 3, 4, 5].map((item) => (
-                  <div key={item} className="flex-shrink-0 w-80 h-60 bg-gradient-to-br from-primary/20 to-secondary rounded-lg border border-primary/20 hover:border-primary/50 transition-all duration-300 flex items-center justify-center fade-in">
-                    <Music size={48} className="text-primary/40" />
-                  </div>
-                ))}
+                {[...Array(10)].map((_, i) => {
+                  const imageNumber = i + 1;
+                  const imageSrc = `${baseUrl}images/gallery${imageNumber}.jpg`;
+                  return (
+                    <div key={imageNumber} className="flex-shrink-0 w-80 h-60 bg-gradient-to-br from-primary/20 to-secondary rounded-lg border border-primary/20 hover:border-primary/50 transition-all duration-300 flex items-center justify-center fade-in overflow-hidden">
+                      <img
+                        src={imageSrc}
+                        alt={`Galerie image ${imageNumber}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => e.currentTarget.closest('.flex-shrink-0')!.classList.add('hidden')}
+                      />
+                      <Music size={48} className="text-primary/40 absolute" />
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <p className="text-center text-gray-400 mt-8">Photos et vidéos de nos cours, événements et soirées sociales</p>
