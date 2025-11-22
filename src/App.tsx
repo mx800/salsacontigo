@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import { ChevronDown, Phone, Mail, Facebook, MapPin, Calendar, Users, Music, Instagram, Send } from 'lucide-react';
+import { 
+  ChevronDown, Phone, Mail, Facebook, MapPin, Calendar, Users, 
+  Music, Instagram, Send, X, ChevronLeft, ChevronRight, Maximize2 
+} from 'lucide-react';
 import { useIsMobile } from './hooks/use-mobile';
 import './App.css';
 import schedules from './data/schedules.json';
@@ -7,7 +10,6 @@ import featuredEvents from './data/featuredEvents.json';
 
 // --- CONFIGURATION GALERIE DYNAMIQUE ---
 // Récupère toutes les images situées dans src/assets/gallery
-// Assurez-vous d'avoir déplacé vos photos dans ce dossier !
 const galleryImports = import.meta.glob('./assets/gallery/*.{png,jpg,jpeg,webp}', { 
   eager: true, 
   as: 'url' 
@@ -23,6 +25,9 @@ function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isMobile = useIsMobile();
   const baseUrl = (import.meta.env.BASE_URL) || '/';
+
+  // --- STATE LIGHTBOX (GALERIE) ---
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   // Vérification s'il y a des événements à afficher
   const hasEvents = featuredEvents && featuredEvents.length > 0;
@@ -78,7 +83,6 @@ function App() {
         // @ts-ignore
         window.FB.XFBML.parse();
       } else {
-        // If the SDK is not yet loaded, try again shortly
         setTimeout(tryParseFb, 500);
       }
     };
@@ -96,6 +100,45 @@ function App() {
     };
     tryParseFb();
   }, [isMobile]);
+
+  // --- LOGIQUE LIGHTBOX ---
+  const openLightbox = (index: number) => {
+    setLightboxIndex(index);
+    document.body.style.overflow = 'hidden'; // Bloque le scroll
+  };
+
+  const closeLightbox = () => {
+    setLightboxIndex(null);
+    document.body.style.overflow = 'unset'; // Réactive le scroll
+  };
+
+  const nextImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setLightboxIndex((prev) => 
+      prev === null ? null : (prev + 1) % galleryImages.length
+    );
+  };
+
+  const prevImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setLightboxIndex((prev) => 
+      prev === null ? null : (prev - 1 + galleryImages.length) % galleryImages.length
+    );
+  };
+
+  // Gestion Clavier Lightbox
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') prevImage();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxIndex]);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -118,7 +161,6 @@ function App() {
               <button onClick={() => scrollToSection('accueil')} className="hover:text-primary transition">Accueil</button>
               <button onClick={() => scrollToSection('biographie')} className="hover:text-primary transition">Biographie</button>
               
-              {/* Affiche le bouton seulement s'il y a des événements */}
               {hasEvents && (
                 <button onClick={() => scrollToSection('evenements')} className="hover:text-primary transition">Événements</button>
               )}
@@ -153,7 +195,6 @@ function App() {
                   <button onClick={() => { scrollToSection('accueil'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Accueil</button>
                   <button onClick={() => { scrollToSection('biographie'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Biographie</button>
                   
-                  {/* Mobile Nav Conditionnelle */}
                   {hasEvents && (
                     <button onClick={() => { scrollToSection('evenements'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Événements</button>
                   )}
@@ -173,7 +214,6 @@ function App() {
 
       {/* Section 1: Hero with Parallax */}
       <section id="accueil" className="relative h-screen overflow-hidden">
-        {/* Parallax Background Layers */}
         <div 
           className="absolute inset-0 parallax-layer"
           style={{
@@ -188,7 +228,6 @@ function App() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"></div>
         </div>
 
-        {/* Content */}
         <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
           <img 
             src={`${baseUrl}images/logo.png`} 
@@ -228,7 +267,7 @@ function App() {
         </div>
       </section>
 
-      {/* Section 3: Événements vedettes - RENDERING CONDITIONNEL */}
+      {/* Section 3: Événements vedettes */}
       {hasEvents && (
         <section id="evenements" className="py-20 bg-black">
           <div className="container mx-auto px-6">
@@ -237,7 +276,7 @@ function App() {
             <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               {featuredEvents.map((event, idx) => {
                 const iconMap = { Calendar, Users, MapPin, Facebook };
-                // @ts-ignore - Dynamic key access
+                // @ts-ignore
                 const MainIcon = iconMap[event.icon];
 
                 return (
@@ -252,10 +291,9 @@ function App() {
                     
                     <div className="space-y-2 text-sm text-gray-400">
                       {event.details.map((detail, detailIdx) => {
-                         // @ts-ignore - Dynamic key access
+                        // @ts-ignore
                         const DetailIcon = iconMap[detail.icon];
                         const iconSize = 16;
-                        
                         return (
                           <div key={detailIdx} className="flex items-center gap-2">
                             {DetailIcon && <DetailIcon size={iconSize} className="text-primary" />}
@@ -300,7 +338,6 @@ function App() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
-            {/* Dance Styles */}
             <div className="bg-black/50 p-6 rounded-lg border border-primary/20 glow-red fade-in">
               <h3 className="font-script text-2xl text-primary mb-4">Styles de Danse</h3>
               <ul className="space-y-2 text-gray-300">
@@ -313,7 +350,6 @@ function App() {
               </ul>
             </div>
 
-            {/* Levels */}
             <div className="bg-black/50 p-6 rounded-lg border border-primary/20 glow-red fade-in" style={{ animationDelay: '0.1s' }}>
               <h3 className="font-script text-2xl text-primary mb-4">Niveaux</h3>
               <ul className="space-y-2 text-gray-300">
@@ -323,7 +359,6 @@ function App() {
               </ul>
             </div>
 
-            {/* Formats */}
             <div className="bg-black/50 p-6 rounded-lg border border-primary/20 glow-red fade-in" style={{ animationDelay: '0.2s' }}>
               <h3 className="font-script text-2xl text-primary mb-4">Formats</h3>
               <ul className="space-y-2 text-gray-300">
@@ -336,7 +371,6 @@ function App() {
             </div>
           </div>
 
-          {/* Special Program */}
           <div className="max-w-3xl mx-auto bg-gradient-to-r from-primary/10 to-primary/5 p-8 rounded-lg border border-primary/30 fade-in">
             <h3 className="font-script text-3xl text-primary mb-4">Cours Bébé-Maman-Salsa</h3>
             <p className="text-gray-300 leading-relaxed">
@@ -352,7 +386,6 @@ function App() {
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Inscriptions & Sessions</h2>
           
           <div className="max-w-5xl mx-auto space-y-8">
-            {/* Pricing Info */}
             <div className="bg-gradient-to-br from-primary/20 to-primary/5 p-8 rounded-lg border border-primary/30 fade-in">
               <h3 className="font-script text-3xl text-primary mb-4">Tarifs</h3>
               <div className="grid md:grid-cols-2 gap-6 text-gray-300">
@@ -374,11 +407,8 @@ function App() {
               </div>
             </div>
 
-            {/* Schedule by City */}
             <div className="space-y-6 fade-in"> 
               <h3 className="font-script text-3xl text-primary text-center mb-8">Horaires par ville</h3>
-              
-              {/* City Schedule Cards */}
               {schedules.map((location, idx) => (
                 <div key={idx} className="bg-secondary p-6 rounded-lg border border-primary/20">
                   <h4 className="text-xl font-semibold text-primary mb-4 flex items-center gap-2">
@@ -398,7 +428,6 @@ function App() {
               ))}
             </div>
 
-            {/* Registration CTA */}
             <div className="text-center fade-in">
               <button 
                 onClick={() => scrollToSection('contact')}
@@ -421,7 +450,6 @@ function App() {
               { name: 'Carlos Rodriguez', specialty: 'Salsa & Rueda' },
               { name: 'Maria Sanchez', specialty: 'Bachata & Cha-Cha' },
               { name: 'Diego Martinez', specialty: 'Merengue & Cumbia' },
-              { name: 'Diego Martinez', specialty: 'Merengue & Cumbia' },
               { name: 'Isabella Torres', specialty: 'Salsa Avancée' },
             ].map((instructor, idx) => (
               <div key={idx} className="bg-black/50 rounded-lg overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 fade-in" style={{ animationDelay: `${idx * 0.1}s` }}>
@@ -438,7 +466,7 @@ function App() {
         </div>
       </section>
 
-      {/* Section 7: Multimédias */}
+      {/* Section 7: Multimédias AVEC LIGHTBOX ET ICÔNE FULLSCREEN */}
       <section id="multimedia" className="py-20 bg-black">
         <div className="container mx-auto px-6">
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Galerie Multimédia</h2>
@@ -449,23 +477,26 @@ function App() {
                   {galleryImages.map((imgSrc, idx) => (
                     <div 
                       key={idx} 
-                      className="relative flex-shrink-0 w-80 h-60 rounded-lg overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 group fade-in"
+                      onClick={() => openLightbox(idx)}
+                      className="relative flex-shrink-0 w-80 h-60 rounded-lg overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 group fade-in cursor-pointer"
                     >
-                      {/* Image réelle */}
                       <img 
                         src={imgSrc} 
                         alt={`Salsa Contigo Galerie ${idx}`}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         loading="lazy"
                       />
-                      {/* Overlay au survol */}
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"></div>
+                      {/* Overlay au survol avec Icône Maximize2 */}
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <div className="p-3 border-2 border-white/80 rounded-full text-white/90 hover:text-white hover:bg-white/10 transition-all transform hover:scale-110">
+                          <Maximize2 size={28} />
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             ) : (
-              // Message si le dossier est vide ou mal configuré
               <div className="text-center p-8 border border-dashed border-gray-700 rounded-lg">
                 <Music size={48} className="text-gray-700 mx-auto mb-4" />
                 <p className="text-gray-500">Ajoutez des photos dans src/assets/gallery pour les voir ici.</p>
@@ -481,7 +512,6 @@ function App() {
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Musique & Réseaux</h2>
 
           <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
-            {/* Spotify Player */}
             <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 glow-red fade-in transition-transform hover:scale-[1.01]">
               <div className="flex items-center gap-4 mb-6">
                 <div className="p-3 bg-primary/10 rounded-full">
@@ -504,9 +534,7 @@ function App() {
               </div>
             </div>
 
-            {/* Facebook Page */}
             <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 glow-red fade-in">
-              {/* Titre et Icône */}
               <div className="flex items-center gap-4 mb-6">
                 <Facebook size={32} className="text-primary" />
                 <h3 className="font-script text-3xl text-primary">Notre page Facebook</h3>
@@ -541,7 +569,6 @@ function App() {
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text">Contactez-nous</h2>
           
           <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-            {/* Contact Info */}
             <div className="space-y-6 fade-in">
               <h3 className="font-script text-3xl text-primary mb-6">Informations</h3>
               
@@ -581,14 +608,12 @@ function App() {
                       <li>Alma, QC</li>
                       <li>Saint-Jean-Eudes, QC</li>
                       <li>Rivière-du-Loup, QC</li>
-                     
                     </ul>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Contact Form */}
             <div className="bg-black/50 p-8 rounded-lg border border-primary/20 glow-red fade-in">
               <h3 className="font-script text-3xl text-primary mb-6">Envoyez-nous un message</h3>
               
@@ -667,6 +692,53 @@ function App() {
         </div>
       </footer>
 
+      {/* --- COMPOSANT LIGHTBOX FULLSCREEN --- */}
+      {lightboxIndex !== null && (
+        <div 
+          className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={closeLightbox}
+        >
+          {/* Bouton Fermer */}
+          <button 
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 text-white/70 hover:text-primary transition p-2 z-50"
+          >
+            <X size={40} />
+          </button>
+
+          {/* Bouton Précédent */}
+          <button 
+            onClick={prevImage}
+            className="absolute left-2 md:left-8 text-white/70 hover:text-primary transition p-2 z-50 bg-black/20 hover:bg-black/50 rounded-full"
+          >
+            <ChevronLeft size={40} />
+          </button>
+
+          {/* Image Centrale */}
+          <div 
+            className="relative max-w-[95vw] max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img 
+              src={galleryImages[lightboxIndex]} 
+              alt="Fullscreen view" 
+              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl border border-primary/20"
+            />
+            <p className="text-center text-gray-400 mt-4 font-script text-xl">
+              {lightboxIndex + 1} / {galleryImages.length}
+            </p>
+          </div>
+
+          {/* Bouton Suivant */}
+          <button 
+            onClick={nextImage}
+            className="absolute right-2 md:right-8 text-white/70 hover:text-primary transition p-2 z-50 bg-black/20 hover:bg-black/50 rounded-full"
+          >
+            <ChevronRight size={40} />
+          </button>
+        </div>
+      )}
+
       {/* Modal Mentions Légales */}
       {showMentionsLegales && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-6 overflow-y-auto">
@@ -688,32 +760,26 @@ function App() {
                 <p><strong>Téléphone :</strong> 418 512-3484</p>
                 <p><strong>Email :</strong> info@salsacontigo.ca</p>
               </section>
-
               <section>
                 <h3 className="text-xl font-semibold text-primary mb-3">2. Propriétaire du site</h3>
                 <p>Ce site web est la propriété et est géré par Ivan Salazar. Tous les droits réservés © 2025.</p>
               </section>
-
               <section>
                 <h3 className="text-xl font-semibold text-primary mb-3">3. Conditions d'utilisation</h3>
                 <p>L'accès et l'utilisation de ce site web sont soumis à ces conditions d'utilisation. En accédant au site, vous acceptez d'être lié par ces conditions.</p>
               </section>
-
               <section>
                 <h3 className="text-xl font-semibold text-primary mb-3">4. Propriété intellectuelle</h3>
                 <p>Tout contenu, images, textes et logos présents sur ce site sont la propriété exclusive de Salsa Contigo ou de ses fournisseurs de contenu et sont protégés par les lois sur la propriété intellectuelle.</p>
               </section>
-
               <section>
                 <h3 className="text-xl font-semibold text-primary mb-3">5. Limitation de responsabilité</h3>
                 <p>Salsa Contigo n'est pas responsable des dommages directs, indirects, accidentels ou consécutifs résultant de l'utilisation ou de l'impossibilité d'utiliser ce site ou ses services.</p>
               </section>
-
               <section>
                 <h3 className="text-xl font-semibold text-primary mb-3">6. Crédits</h3>
                 <p><strong>Développement :</strong> Maxime Savard, Développeur Indépendant</p>
               </section>
-
               <section>
                 <h3 className="text-xl font-semibold text-primary mb-3">7. Contact pour questions légales</h3>
                 <p>Pour toute question concernant ces mentions légales, veuillez nous contacter à :</p>
@@ -751,7 +817,6 @@ function App() {
                 <h3 className="text-xl font-semibold text-primary mb-3">🛡️ Engagement envers votre vie privée</h3>
                 <p>Chez Salsa Contigo, nous respectons votre vie privée. Nous nous engageons à protéger vos données personnelles et à être transparent sur notre utilisation.</p>
               </section>
-
               <section>
                 <h3 className="text-xl font-semibold text-primary mb-3">📊 Données collectées</h3>
                 <p>Lorsque vous nous contactez via le formulaire de contact, nous collectons temporairement :</p>
@@ -762,31 +827,26 @@ function App() {
                   <li>Votre message</li>
                 </ul>
               </section>
-
               <section>
                 <h3 className="text-xl font-semibold text-primary mb-3">🔒 Aucun stockage des données</h3>
                 <p className="font-semibold text-primary">✓ Salsa Contigo NE conserve PAS vos données personnelles.</p>
                 <p className="mt-2">Les informations du formulaire de contact sont utilisées uniquement pour vous répondre et ne sont jamais stockées dans nos bases de données. Elles sont supprimées après traitement.</p>
               </section>
-
               <section>
                 <h3 className="text-xl font-semibold text-primary mb-3">🍪 Pas de cookies</h3>
                 <p className="font-semibold text-primary">✓ Ce site n'utilise AUCUN cookie.</p>
                 <p className="mt-2">Nous ne suivons pas votre activité, ne placez pas de traceurs, et ne collectons aucune information de navigation. Votre expérience sur notre site est complètement anonyme.</p>
               </section>
-
               <section>
                 <h3 className="text-xl font-semibold text-primary mb-3">🔐 Sécurité</h3>
                 <p>Bien que nous ne conservions pas vos données, nous prenons les mesures de sécurité appropriées lors de la transmission de vos informations de contact.</p>
               </section>
-
               <section>
                 <h3 className="text-xl font-semibold text-primary mb-3">📬 Contact</h3>
                 <p>Pour toute question concernant cette politique de confidentialité :</p>
                 <p className="mt-2"><strong>Email :</strong> info@salsacontigo.ca</p>
                 <p><strong>Téléphone :</strong> 418 512-3484</p>
               </section>
-
               <section>
                 <h3 className="text-xl font-semibold text-primary mb-3">📝 Modifications</h3>
                 <p>Cette politique peut être mise à jour à tout moment. La dernière modification date de novembre 2025.</p>
