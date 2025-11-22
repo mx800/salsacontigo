@@ -1,9 +1,18 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronDown, Phone, Mail, Facebook, MapPin, Calendar, Users, Music, Instagram, Send } from 'lucide-react';
 import { useIsMobile } from './hooks/use-mobile';
 import './App.css';
 import schedules from './data/schedules.json';
 import featuredEvents from './data/featuredEvents.json';
+
+// --- CONFIGURATION GALERIE DYNAMIQUE ---
+// Récupère toutes les images situées dans src/assets/gallery
+// Assurez-vous d'avoir déplacé vos photos dans ce dossier !
+const galleryImports = import.meta.glob('./assets/gallery/*.{png,jpg,jpeg,webp}', { 
+  eager: true, 
+  as: 'url' 
+});
+const galleryImages = Object.values(galleryImports);
 
 function App() {
   const [scrollY, setScrollY] = useState(0);
@@ -216,7 +225,8 @@ function App() {
             <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               {featuredEvents.map((event, idx) => {
                 const iconMap = { Calendar, Users, MapPin, Facebook };
-                const MainIcon = iconMap[event.icon as keyof typeof iconMap];
+                // @ts-ignore - Dynamic key access
+                const MainIcon = iconMap[event.icon];
 
                 return (
                   <div key={idx} className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 hover:border-primary/50 transition-all duration-300 glow-red fade-in">
@@ -230,7 +240,8 @@ function App() {
                     
                     <div className="space-y-2 text-sm text-gray-400">
                       {event.details.map((detail, detailIdx) => {
-                        const DetailIcon = iconMap[detail.icon as keyof typeof iconMap];
+                         // @ts-ignore - Dynamic key access
+                        const DetailIcon = iconMap[detail.icon];
                         const iconSize = 16;
                         
                         return (
@@ -415,32 +426,46 @@ function App() {
         </div>
       </section>
 
-      {/* Section 7: Multimédias */}
+      {/* Section 7: Multimédias - DYNAMIQUE */}
       <section id="multimedia" className="py-20 bg-black">
         <div className="container mx-auto px-6">
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Galerie Multimédia</h2>
-
-          <div className="max-w-5xl mx-auto">
-            <div className="overflow-x-auto overflow-y-hidden">
-              <div className="flex gap-6 pb-4">
-                {[...Array(10)].map((_, i) => {
-                  const imageNumber = i + 1;
-                  const imageSrc = `${baseUrl}images/gallery${imageNumber}.jpg`;
-                  return (
-                    <div key={imageNumber} className="flex-shrink-0 w-80 h-60 bg-gradient-to-br from-primary/20 to-secondary rounded-lg border border-primary/20 hover:border-primary/50 transition-all duration-300 flex items-center justify-center fade-in overflow-hidden">
-                      <img
-                        src={imageSrc}
-                        alt={`Galerie image ${imageNumber}`}
-                        className="w-full h-full object-cover"
-                        onError={(e) => e.currentTarget.closest('.flex-shrink-0')!.classList.add('hidden')}
+          
+          <div className="max-w-full mx-auto">
+            {galleryImages.length > 0 ? (
+              <div className="overflow-x-auto overflow-y-hidden pb-4">
+                <div className="flex gap-6" style={{ width: 'max-content' }}>
+                  {galleryImages.map((imgSrc, idx) => (
+                    <div 
+                      key={idx} 
+                      className="relative flex-shrink-0 w-80 h-60 rounded-lg overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 group fade-in"
+                    >
+                      {/* Image réelle */}
+                      <img 
+                        src={imgSrc} 
+                        alt={`Salsa Contigo Galerie ${idx}`}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
                       />
-                      <Music size={48} className="text-primary/40 absolute" />
+                      {/* Overlay au survol */}
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <Music size={32} className="text-primary drop-shadow-lg" />
+                      </div>
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
-            </div>
-            <p className="text-center text-gray-400 mt-8">Photos et vidéos de nos cours, événements et soirées sociales</p>
+            ) : (
+              // Message si le dossier est vide ou mal configuré
+              <div className="text-center p-8 border border-dashed border-gray-700 rounded-lg">
+                <Music size={48} className="text-gray-700 mx-auto mb-4" />
+                <p className="text-gray-500">Ajoutez des photos dans src/assets/gallery pour les voir ici.</p>
+              </div>
+            )}
+            
+            <p className="text-center text-gray-400 mt-8">
+              Photos et vidéos de nos cours, événements et soirées sociales
+            </p>
           </div>
         </div>
       </section>
@@ -482,20 +507,17 @@ function App() {
                 <h3 className="font-script text-3xl text-primary">Notre page Facebook</h3>
               </div>
 
-              {/* Conteneur du plugin (Centré) */}
-              <div className="w-full flex justify-center overflow-hidden bg-white/5 rounded-lg p-2"> 
+              <div className="w-full flex justify-center overflow-hidden"> 
                 <div
                   className="fb-page"
                   data-href="https://www.facebook.com/salsacontigo.ca/"
                   data-tabs="timeline"
                   data-width="500"
                   data-height="352"
-                  data-small-header="false"
+                  data-small-header="true"
                   data-adapt-container-width="true"
-                  data-hide-cover="false"
-                  data-show-facepile="true"
-                  data-lazy="true"
-                  data-colorscheme="dark"
+                  data-hide-cover="true"
+                  data-show-facepile="false"
                 >
                   <blockquote cite="https://www.facebook.com/salsacontigo.ca/" className="fb-xfbml-parse-ignore">
                     <a href="https://www.facebook.com/salsacontigo.ca/">Salsa Contigo</a>
