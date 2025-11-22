@@ -466,7 +466,7 @@ function App() {
         </div>
       </section>
 
-      {/* Section 7: Multimédias AVEC LIGHTBOX ET ICÔNE FULLSCREEN */}
+      {/* Section 7: Multimédias AVEC ICÔNE ROUGE */}
       <section id="multimedia" className="py-20 bg-black">
         <div className="container mx-auto px-6">
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Galerie Multimédia</h2>
@@ -486,9 +486,9 @@ function App() {
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         loading="lazy"
                       />
-                      {/* Overlay au survol avec Icône Maximize2 */}
+                      {/* Overlay au survol avec Icône Rouge (text-primary) */}
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <div className="p-3 border-2 border-white/80 rounded-full text-white/90 hover:text-white hover:bg-white/10 transition-all transform hover:scale-110">
+                        <div className="p-3 border-2 border-primary rounded-full text-primary hover:bg-primary/20 transition-all transform hover:scale-110">
                           <Maximize2 size={28} />
                         </div>
                       </div>
