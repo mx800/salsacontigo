@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { ChevronDown, Phone, Mail, Facebook, MapPin, Calendar, Users, Music, Instagram, Send } from 'lucide-react';
 import { useIsMobile } from './hooks/use-mobile';
 import './App.css';
+import schedules from './data/schedules.json';
 
 function App() {
   const [scrollY, setScrollY] = useState(0);
@@ -322,22 +323,7 @@ function App() {
               <h3 className="font-script text-3xl text-primary text-center mb-8">Horaires par ville</h3>
               
               {/* City Schedule Cards */}
-              {[
-                { city: 'Jonquière', days: [
-                  { day: 'Lundi', course: 'Salsa Débutant', time: '19h00 - 20h00' },
-                  { day: 'Mercredi', course: 'Salsa Intermédiaire', time: '19h30 - 20h30' },
-                ]},
-                { city: 'Saint-Jean-Eudes', days: [
-                  { day: 'Mercredi', course: 'Rueda de Casino', time: '19h30 - 20h30' },
-                ]},
-                { city: 'Alma', days: [
-                  { day: 'Mardi', course: 'Bachata Débutant', time: '18h30 - 19h30' },
-                  { day: 'Jeudi', course: 'Salsa Avancé', time: '20h00 - 21h00' },
-                ]},
-                { city: 'Rivière-du-Loup', days: [
-                  { day: 'Lundi', course: 'Merengue & Cumbia', time: '19h00 - 20h00' },
-                ]},
-              ].map((location, idx) => (
+              {schedules.map((location, idx) => (
                 <div key={idx} className="bg-secondary p-6 rounded-lg border border-primary/20">
                   <h4 className="text-xl font-semibold text-primary mb-4 flex items-center gap-2">
                     <MapPin size={20} />
