@@ -58,6 +58,19 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
+  // Re-parse Facebook plugin
+  useEffect(() => {
+    const tryParseFb = () => {
+      if ((window as any).FB) {
+        (window as any).FB.XFBML.parse();
+      } else {
+        // If the SDK is not yet loaded, try again shortly
+        setTimeout(tryParseFb, 500);
+      }
+    };
+    tryParseFb();
+  }, []);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -431,27 +444,32 @@ function App() {
       </section>
 
       {/* Section 9: Réseaux sociaux */}
-      <section id="reseaux" className="py-20 bg-black">
+            <section id="reseaux" className="py-20 bg-black">
         <div className="container mx-auto px-6">
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Suivez-nous</h2>
           
-          <div className="max-w-4xl mx-auto space-y-8">
+          <div className="max-w-xl mx-auto">
+            {/* Combined Block: Info + Facebook Plugin */}
             <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 glow-red fade-in">
               <div className="flex items-center gap-4 mb-6">
                 <Facebook size={32} className="text-primary" />
-                <h3 className="font-script text-3xl text-primary">Facebook</h3>
+                <h3 className="font-script text-3xl text-primary">Notre page Facebook</h3>
               </div>
-              <p className="text-gray-300 mb-6">
-                Rejoignez notre communauté sur Facebook pour les dernières nouvelles, photos d'événements et annonces de cours.
-              </p>
-              <a 
-                href="https://www.facebook.com/pages/Salsa-Contigo/146855305346623" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-block bg-primary hover:bg-primary-light px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
-              >
-                Visiter notre page
-              </a>
+              
+               <div 
+                className="fb-page" 
+                data-href="https://www.facebook.com/salsacontigo.ca/"
+                data-tabs="timeline" 
+                data-width="500" 
+                data-height="600" 
+                data-small-header="true"
+                data-adapt-container-width="true" 
+                data-hide-cover="true" 
+                data-show-facepile="false">
+                <blockquote cite="https://www.facebook.com/salsacontigo.ca/" className="fb-xfbml-parse-ignore">
+                  <a href="https://www.facebook.com/salsacontigo.ca/">Salsa Contigo</a>
+                </blockquote>
+              </div>
             </div>
           </div>
         </div>
