@@ -441,23 +441,29 @@ function App() {
 
             {/* Facebook Page */}
             <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 glow-red fade-in">
+              {/* Titre et Icône */}
               <div className="flex items-center gap-4 mb-6">
                 <Facebook size={32} className="text-primary" />
                 <h3 className="font-script text-3xl text-primary">Notre page Facebook</h3>
               </div>
-              <div
-                className="fb-page"
-                data-href="https://www.facebook.com/salsacontigo.ca/"
-                data-tabs="timeline"
-                data-height="352"
-                data-small-header="true"
-                data-adapt-container-width="true"
-                data-hide-cover="true"
-                data-show-facepile="false"
-              >
-                <blockquote cite="https://www.facebook.com/salsacontigo.ca/" className="fb-xfbml-parse-ignore">
-                  <a href="https://www.facebook.com/salsacontigo.ca/">Salsa Contigo</a>
-                </blockquote>
+
+              {/* Conteneur du plugin (Centré) */}
+              <div className="w-full flex justify-center overflow-hidden"> 
+                <div
+                  className="fb-page"
+                  data-href="https://www.facebook.com/salsacontigo.ca/"
+                  data-tabs="timeline"
+                  data-width="500"
+                  data-height="352"
+                  data-small-header="true"
+                  data-adapt-container-width="true"
+                  data-hide-cover="true"
+                  data-show-facepile="false"
+                >
+                  <blockquote cite="https://www.facebook.com/salsacontigo.ca/" className="fb-xfbml-parse-ignore">
+                    <a href="https://www.facebook.com/salsacontigo.ca/">Salsa Contigo</a>
+                  </blockquote>
+                </div>
               </div>
             </div>
           </div>
