@@ -85,6 +85,14 @@ function App() {
     tryParseFb();
   }, []);
 
+   useEffect(() => {
+    if (window.FB) {
+      setTimeout(() => {
+        window.FB.XFBML.parse();
+      }, 200);
+    }
+  }, [isMobile]);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -504,10 +512,11 @@ function App() {
 
               <div className="w-full flex justify-center overflow-hidden"> 
                 <div
+                  key={isMobile ? "fb-mobile" : "fb-desktop"} 
                   className="fb-page"
                   data-href="https://www.facebook.com/salsacontigo.ca/"
                   data-tabs="timeline"
-                  data-width="500"
+                  data-width={isMobile ? "300" : "500"} 
                   data-height="352"
                   data-small-header="true"
                   data-adapt-container-width="true"
