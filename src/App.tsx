@@ -28,11 +28,6 @@ function App() {
   // --- STATE LIGHTBOX (GALERIE) ---
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  // --- STATE TOUCH (SWIPE MOBILE) ---
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const minSwipeDistance = 50; // Distance minimum pour valider le swipe
-
   const hasEvents = featuredEvents && featuredEvents.length > 0;
 
   // Parallax and scroll handling
@@ -129,38 +124,6 @@ function App() {
     );
   };
 
-  // --- LOGIQUE TOUCH (SWIPE) ---
-  const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null); // Reset
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-
-    if (isLeftSwipe) {
-      // Swipe gauche -> Image suivante
-      setLightboxIndex((prev) => 
-        prev === null ? null : (prev + 1) % galleryImages.length
-      );
-    }
-    if (isRightSwipe) {
-      // Swipe droite -> Image précédente
-      setLightboxIndex((prev) => 
-        prev === null ? null : (prev - 1 + galleryImages.length) % galleryImages.length
-      );
-    }
-  };
-
-  // Gestion Clavier
   useEffect(() => {
     if (lightboxIndex === null) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -186,11 +149,13 @@ function App() {
   return (
     <div className="min-h-screen bg-black text-white">
       
+      {/* Styles injectés pour l'animation et le masque */}
       <style>{`
         @keyframes scroll-left {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
+        /* Animation ralentie à 80s (au lieu de 40s) */
         .animate-scroll {
           animation: scroll-left 80s linear infinite;
           width: max-content;
@@ -198,6 +163,7 @@ function App() {
         .animate-scroll:hover {
           animation-play-state: paused;
         }
+        /* Masque dégradé pour les bords gauche et droit */
         .carousel-mask {
           mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
           -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
@@ -509,11 +475,12 @@ function App() {
         </div>
       </section>
 
-      {/* Section 7: Multimédias */}
+      {/* Section 7: Multimédias - CAROUSSEL FLUIDE AVEC MASQUE */}
       <section id="multimedia" className="py-20 bg-black overflow-hidden">
         <div className="container-fluid">
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Galerie Multimédia</h2>
           
+          {/* Ajout de la classe carousel-mask ici */}
           <div className="w-full relative overflow-hidden carousel-mask">
             {galleryImages.length > 0 ? (
               <div className="flex gap-6 animate-scroll">
@@ -589,7 +556,7 @@ function App() {
                   className="fb-page"
                   data-href="https://www.facebook.com/salsacontigo.ca/"
                   data-tabs="timeline"
-                  data-width={isMobile ? "300" : "500"} 
+                  data-width={isMobile ? "330" : "500"} 
                   data-height="352"
                   data-small-header="true"
                   data-adapt-container-width="true"
@@ -740,10 +707,6 @@ function App() {
         <div 
           className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={closeLightbox}
-          // AJOUT DES ÉVÉNEMENTS TOUCH ICI
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
         >
           <button 
             onClick={closeLightbox}
@@ -752,10 +715,9 @@ function App() {
             <X size={40} />
           </button>
 
-          {/* Bouton Précédent (Masqué sur mobile pour laisser la place au swipe, ou visible si préféré) */}
           <button 
-            onClick={(e) => { e.stopPropagation(); prevImage(e); }}
-            className="hidden md:block absolute left-2 md:left-8 text-white/70 hover:text-primary transition p-2 z-50 bg-black/20 hover:bg-black/50 rounded-full"
+            onClick={prevImage}
+            className="absolute left-2 md:left-8 text-white/70 hover:text-primary transition p-2 z-50 bg-black/20 hover:bg-black/50 rounded-full"
           >
             <ChevronLeft size={40} />
           </button>
@@ -774,10 +736,9 @@ function App() {
             </p>
           </div>
 
-          {/* Bouton Suivant */}
           <button 
-            onClick={(e) => { e.stopPropagation(); nextImage(e); }}
-            className="hidden md:block absolute right-2 md:right-8 text-white/70 hover:text-primary transition p-2 z-50 bg-black/20 hover:bg-black/50 rounded-full"
+            onClick={nextImage}
+            className="absolute right-2 md:right-8 text-white/70 hover:text-primary transition p-2 z-50 bg-black/20 hover:bg-black/50 rounded-full"
           >
             <ChevronRight size={40} />
           </button>
