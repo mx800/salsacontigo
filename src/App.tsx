@@ -96,7 +96,7 @@ function App() {
               <button onClick={() => scrollToSection('inscriptions')} className="hover:text-primary transition">Inscriptions</button>
               <button onClick={() => scrollToSection('professeurs')} className="hover:text-primary transition">Professeurs</button>
               <button onClick={() => scrollToSection('multimedia')} className="hover:text-primary transition">Multimédia</button>
-              <button onClick={() => scrollToSection('spotify')} className="hover:text-primary transition">Musique</button>
+              <button onClick={() => scrollToSection('social')} className="hover:text-primary transition">Réseaux</button>
               <button onClick={() => scrollToSection('contact')} className="hover:text-primary transition">Contact</button>
             </div>
 
@@ -126,7 +126,7 @@ function App() {
                   <button onClick={() => { scrollToSection('inscriptions'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Inscriptions</button>
                   <button onClick={() => { scrollToSection('professeurs'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Professeurs</button>
                   <button onClick={() => { scrollToSection('multimedia'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Multimédia</button>
-                  <button onClick={() => { scrollToSection('spotify'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Musique</button>
+                  <button onClick={() => { scrollToSection('social'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Réseaux</button>
                   <button onClick={() => { scrollToSection('contact'); setIsMobileMenuOpen(false); }} className="text-left hover:text-primary transition py-2">Contact</button>
                 </nav>
               </div>
@@ -418,54 +418,43 @@ function App() {
         </div>
       </section>
 
-      {/* Section 8: Page Spotify dédiée */}
-      <section id="spotify" className="py-20 bg-gradient-to-b from-black to-secondary">
+      {/* Section 8: Musique & Réseaux */}
+      <section id="social" className="py-20 bg-gradient-to-b from-black to-secondary">
         <div className="container mx-auto px-6">
-          <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Notre Musique</h2>
-          
-          <div className="max-w-3xl mx-auto text-center fade-in">
-            <div className="bg-black/50 p-8 rounded-lg border border-primary/20">
-              <Music size={64} className="text-primary mx-auto mb-6" />
-              <h3 className="font-script text-3xl text-primary mb-4">Playlist Salsa Contigo</h3>
-              <p className="text-gray-300 mb-8">
-                Découvrez notre sélection musicale de salsa, bachata, merengue et plus encore. Les rythmes qui font vibrer nos cours !
-              </p>
-              <a 
-                href="https://open.spotify.com/search/salsacontigo" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-block bg-primary hover:bg-primary-light px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
-              >
-                Écouter sur Spotify
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+          <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Musique & Réseaux</h2>
 
-      {/* Section 9: Réseaux sociaux */}
-            <section id="reseaux" className="py-20 bg-black">
-        <div className="container mx-auto px-6">
-          <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Suivez-nous</h2>
-          
-          <div className="max-w-xl mx-auto">
-            {/* Combined Block: Info + Facebook Plugin */}
+          <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            {/* Spotify Player */}
+            <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 glow-red fade-in">
+              <div className="flex items-center gap-4 mb-6">
+                <Music size={32} className="text-primary" />
+                <h3 className="font-script text-3xl text-primary">Notre Playlist</h3>
+              </div>
+              <iframe
+                className="rounded-lg w-full"
+                src="https://open.spotify.com/embed/playlist/37i9dQZF1DX0rgAD2A8y23?utm_source=generator&theme=0"
+                height="352"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+              ></iframe>
+            </div>
+
+            {/* Facebook Page */}
             <div className="bg-gradient-to-br from-secondary to-black p-8 rounded-lg border border-primary/20 glow-red fade-in">
               <div className="flex items-center gap-4 mb-6">
                 <Facebook size={32} className="text-primary" />
                 <h3 className="font-script text-3xl text-primary">Notre page Facebook</h3>
               </div>
-              
-               <div 
-                className="fb-page" 
+              <div
+                className="fb-page"
                 data-href="https://www.facebook.com/salsacontigo.ca/"
-                data-tabs="timeline" 
-                data-width="500" 
-                data-height="600" 
+                data-tabs="timeline"
+                data-height="352"
                 data-small-header="true"
-                data-adapt-container-width="true" 
-                data-hide-cover="true" 
-                data-show-facepile="false">
+                data-adapt-container-width="true"
+                data-hide-cover="true"
+                data-show-facepile="false"
+              >
                 <blockquote cite="https://www.facebook.com/salsacontigo.ca/" className="fb-xfbml-parse-ignore">
                   <a href="https://www.facebook.com/salsacontigo.ca/">Salsa Contigo</a>
                 </blockquote>
