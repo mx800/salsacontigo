@@ -27,13 +27,22 @@ function App() {
 
   // --- STATE LIGHTBOX (GALERIE FULLSCREEN) ---
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  
   // États pour le swipe dans le Lightbox (Fullscreen)
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   
-  // --- STATE CAROUSSEL MINI (AUTO-SCROLL) ---
+  // --- STATE CAROUSSEL MINI (AUTO-SCROLL & DRAG) ---
   const carouselRef = useRef<HTMLDivElement>(null);
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
+  
+  // Accumulateur de position précis (float) pour éviter l'arrêt du scroll si < 1px
+  const scrollPosRef = useRef(0);
+  
+  // Refs pour la gestion du "Drag" à la souris sur Desktop
+  const isMouseDown = useRef(false);
+  const startX = useRef(0);
+  const startScrollLeft = useRef(0);
 
   const hasEvents = featuredEvents && featuredEvents.length > 0;
 
@@ -81,6 +90,7 @@ function App() {
 
   // --- LOGIQUE LIGHTBOX (FULLSCREEN) ---
   const openLightbox = (index: number) => {
+    if (isMouseDown.current) return; // Anti-clic lors du drag
     setLightboxIndex(index);
     document.body.style.overflow = 'hidden';
   };
@@ -97,7 +107,7 @@ function App() {
     setLightboxIndex((prev) => prev === null ? null : (prev - 1 + galleryImages.length) % galleryImages.length);
   };
 
-  // Swipe Logic Lightbox (Fullscreen)
+  // Swipe Logic Lightbox
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
@@ -111,7 +121,6 @@ function App() {
     if (distance < -minSwipeDistance) prevImage();
   };
 
-  // Clavier Lightbox
   useEffect(() => {
     if (lightboxIndex === null) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -123,32 +132,77 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [lightboxIndex]);
 
-  // --- LOGIQUE CAROUSSEL MINI (JS ANIMATION) ---
-  // Permet l'auto-scroll ET le scroll manuel tactile
+  // --- LOGIQUE CAROUSSEL MINI (JS ANIMATION + MOUSE DRAG) ---
+  
+  // 1. Animation Automatique Robuste
   useEffect(() => {
     const scrollContainer = carouselRef.current;
     if (!scrollContainer) return;
 
     let animationFrameId: number;
+    
+    // Vitesse du caroussel (pixels par frame). 0.5 = ~30px/sec (lent et fluide)
+    const speed = 0.5; 
 
     const scroll = () => {
-      // Si l'utilisateur ne touche pas le carrousel, on défile automatiquement
       if (!isCarouselPaused) {
-        // Vitesse du défilement (0.5 pour lent, 1 pour normal)
-        scrollContainer.scrollLeft += 0.5;
+        // On ajoute la vitesse à notre variable de référence précise
+        scrollPosRef.current += speed;
 
-        // Logique de boucle infinie : si on arrive à la moitié (fin du set original), on remet au début
-        // On utilise scrollWidth / 2 car on a doublé les images
-        if (scrollContainer.scrollLeft >= (scrollContainer.scrollWidth / 2)) {
-          scrollContainer.scrollLeft = 0;
+        // On calcule la largeur d'un set d'images (puisqu'on a 4 copies, c'est total / 4)
+        const singleSetWidth = scrollContainer.scrollWidth / 4;
+
+        // Si on a dépassé la largeur d'un set, on remet à 0 (boucle infinie invisible)
+        if (scrollPosRef.current >= singleSetWidth) {
+          scrollPosRef.current = 0;
         }
+
+        // On applique la position au DOM
+        scrollContainer.scrollLeft = scrollPosRef.current;
+      } else {
+        // Si en pause (l'utilisateur touche), on synchronise notre ref avec la position réelle
+        // pour ne pas que ça saute quand on relâche
+        scrollPosRef.current = scrollContainer.scrollLeft;
       }
       animationFrameId = requestAnimationFrame(scroll);
     };
 
     animationFrameId = requestAnimationFrame(scroll);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isCarouselPaused]);
+  }, [isCarouselPaused]); // Dépendance uniquement sur la pause
+
+  // 2. Gestionnaires d'événements pour la SOURIS (Desktop Drag)
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!carouselRef.current) return;
+    isMouseDown.current = true;
+    setIsCarouselPaused(true);
+    startX.current = e.pageX - carouselRef.current.offsetLeft;
+    startScrollLeft.current = carouselRef.current.scrollLeft;
+    carouselRef.current.style.cursor = 'grabbing';
+  };
+
+  const handleMouseLeave = () => {
+    isMouseDown.current = false;
+    setIsCarouselPaused(false); // Reprend le défilement
+    if (carouselRef.current) carouselRef.current.style.cursor = 'grab';
+  };
+
+  const handleMouseUp = () => {
+    isMouseDown.current = false;
+    setIsCarouselPaused(false); // Reprend le défilement
+    if (carouselRef.current) carouselRef.current.style.cursor = 'grab';
+    setTimeout(() => { isMouseDown.current = false; }, 50); 
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseDown.current || !carouselRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - carouselRef.current.offsetLeft;
+    const walk = (x - startX.current) * 2; // Sensibilité du drag
+    carouselRef.current.scrollLeft = startScrollLeft.current - walk;
+    // Mise à jour de la ref pour que l'auto-scroll reprenne au bon endroit
+    scrollPosRef.current = carouselRef.current.scrollLeft;
+  };
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -158,27 +212,21 @@ function App() {
     }
   };
 
-  // Doublement des images pour l'effet infini
-  const displayImages = [...galleryImages, ...galleryImages];
+  // On quadruple les images pour être sûr que la boucle infinie fonctionne
+  // même sur les très grands écrans.
+  const displayImages = [...galleryImages, ...galleryImages, ...galleryImages, ...galleryImages];
 
   return (
     <div className="min-h-screen bg-black text-white">
       
-      {/* Styles utilitaires */}
       <style>{`
-        /* Masque les scrollbars tout en permettant le scroll */
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        /* Effet vignette sur les côtés */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .carousel-mask {
           mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
           -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
         }
+        .cursor-grab { cursor: grab; }
       `}</style>
 
       {/* Navigation */}
@@ -389,24 +437,24 @@ function App() {
         </div>
       </section>
 
-      {/* Section 7: Multimédias - CAROUSSEL AVEC CONTRAINTES DE LARGEUR ET SWIPE MINI */}
+      {/* Section 7: Multimédias - CAROUSSEL AVEC MOUSE DRAG */}
       <section id="multimedia" className="py-20 bg-black">
-        {/* Changement ici : on utilise "container mx-auto px-6" au lieu de container-fluid */}
         <div className="container mx-auto px-6">
           <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Galerie Multimédia</h2>
           
-          {/* Conteneur du carrousel : Limite la largeur (max-w-full) et masque le débordement */}
           <div className="relative w-full max-w-full overflow-hidden rounded-lg border border-primary/10 carousel-mask">
-            
             {galleryImages.length > 0 ? (
               <div 
                 ref={carouselRef}
-                className="flex gap-6 overflow-x-auto no-scrollbar"
-                /* Événements pour le swipe manuel sur mobile */
+                className="flex gap-6 overflow-x-auto no-scrollbar cursor-grab"
+                /* Événements Tactiles (Mobile) */
                 onTouchStart={() => setIsCarouselPaused(true)}
                 onTouchEnd={() => setIsCarouselPaused(false)}
-                onMouseEnter={() => setIsCarouselPaused(true)} // Pause souris aussi
-                onMouseLeave={() => setIsCarouselPaused(false)}
+                /* Événements Souris (Desktop) */
+                onMouseDown={handleMouseDown}
+                onMouseLeave={handleMouseLeave}
+                onMouseUp={handleMouseUp}
+                onMouseMove={handleMouseMove}
                 style={{ whiteSpace: 'nowrap' }}
               >
                 {displayImages.map((imgSrc, idx) => (
@@ -420,7 +468,7 @@ function App() {
                       alt={`Salsa Contigo Galerie`}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       loading="lazy"
-                      draggable="false" // Empêche le drag natif de l'image pour permettre le scroll
+                      draggable="false" 
                     />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <div className="p-3 border-2 border-primary rounded-full text-primary hover:bg-primary/20 transition-all transform hover:scale-110">
@@ -525,7 +573,7 @@ function App() {
         </div>
       )}
 
-      {/* Modales Mentions & Politique (simplifiées pour l'affichage) */}
+      {/* Modales Mentions & Politique */}
       {showMentionsLegales && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-6">
           <div className="bg-secondary rounded-lg p-8 max-w-2xl w-full relative">
