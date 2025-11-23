@@ -78,15 +78,28 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
-  // Facebook plugin
+// Facebook plugin
   useEffect(() => {
     const tryParseFb = () => {
       // @ts-ignore
-      if (window.FB) { /* @ts-ignore */ window.FB.XFBML.parse(); } 
-      else { setTimeout(tryParseFb, 500); }
+      if (window.FB) {
+        try {
+            // @ts-ignore
+            window.FB.init({
+                xfbml: true,
+                version: 'v18.0' 
+            });
+            // @ts-ignore
+            window.FB.XFBML.parse();
+        } catch (e) {
+            console.error("Facebook SDK error:", e);
+        }
+      } else {
+        setTimeout(tryParseFb, 500);
+      }
     };
     tryParseFb();
-  }, [isMobile]);
+  }, []);
 
   // --- LOGIQUE LIGHTBOX (FULLSCREEN) ---
   const openLightbox = (index: number) => {
