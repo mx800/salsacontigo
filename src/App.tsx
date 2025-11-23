@@ -528,7 +528,7 @@ function App() {
                 </p>
                 <div className="h-1 w-20 bg-primary/50 mx-auto md:mx-0 mb-6 rounded-full"></div>
                 <p className="text-gray-300 leading-relaxed text-lg italic">
-                  "Transmettre la passion de la culture latine est bien plus qu'un métier, c'est une mission de vie. Bienvenue dans notre grande famille."
+                  Originaire du Venezuela et fondateur de Salsa Contigo, Ivan Salazar met à profit plus de 20 ans d'expérience internationale pour partager sa culture et vous enseigner les danses latines avec une énergie contagieuse.
                 </p>
               </div>
             </div>
