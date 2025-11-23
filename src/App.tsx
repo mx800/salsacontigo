@@ -493,25 +493,64 @@ function App() {
         </div>
       </section>
 
-     {/* Section 6: Professeurs */}
+{/* Section 6: Professeurs & Propriétaire */}
       <section id="professeurs" className="py-20 bg-gradient-to-b from-black to-secondary">
         <div className="container mx-auto px-6">
-          <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">Nos Professeurs</h2>
+          <h2 className="font-script text-5xl md:text-6xl text-center mb-16 gradient-text fade-in">L'Équipe</h2>
           
+          {/* --- MISE EN AVANT DU PROPRIÉTAIRE --- */}
+          <div className="max-w-4xl mx-auto mb-20 fade-in">
+            <div className="bg-gradient-to-r from-black/80 to-secondary/80 p-8 md:p-10 rounded-2xl border border-primary/40 glow-red flex flex-col md:flex-row items-center gap-8 md:gap-12 relative overflow-hidden">
+              
+              {/* Effet d'arrière-plan décoratif */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
+
+              {/* Photo du propriétaire */}
+              <div className="relative shrink-0">
+                <div className="w-48 h-48 md:w-56 md:h-56 rounded-full border-4 border-primary/30 p-1 shadow-[0_0_30px_rgba(220,38,38,0.2)]">
+                  {/* REMPLACER PAR LA VRAIE PHOTO : src={`${baseUrl}images/ivan.jpg`} */}
+                  <div className="w-full h-full rounded-full bg-black overflow-hidden flex items-center justify-center">
+                     {/* Si pas d'image, on affiche une icône, sinon mettre <img src="..." /> */}
+                     <Users size={80} className="text-primary/60" /> 
+                  </div>
+                </div>
+                {/* Petit badge décoratif */}
+                <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-primary text-white p-2 rounded-full shadow-lg">
+                  <Music size={20} fill="currentColor" />
+                </div>
+              </div>
+
+              {/* Info Propriétaire */}
+              <div className="text-center md:text-left z-10">
+                <h3 className="font-script text-4xl md:text-5xl text-primary mb-2">Ivan Salazar</h3>
+                <p className="text-xl text-white font-medium tracking-wide mb-4 uppercase text-sm md:text-base">
+                  Propriétaire
+                </p>
+                <div className="h-1 w-20 bg-primary/50 mx-auto md:mx-0 mb-6 rounded-full"></div>
+                <p className="text-gray-300 leading-relaxed text-lg italic">
+                  "Transmettre la passion de la culture latine est bien plus qu'un métier, c'est une mission de vie. Bienvenue dans notre grande famille."
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* --- GRILLE DES PROFESSEURS --- */}
+          <h3 className="font-script text-3xl text-center text-primary mb-6 fade-in">Nos Professeurs</h3>
+
           <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
             {[
-              { name: 'Carlos Rodriguez', specialty: 'Salsa & Rueda' },
-              { name: 'Maria Sanchez', specialty: 'Bachata & Cha-Cha' },
-              { name: 'Diego Martinez', specialty: 'Merengue & Cumbia' },
-              { name: 'Isabella Torres', specialty: 'Salsa Avancée' },
+              { name: 'Manon Brassard' },
+              { name: 'Gabrielle Tremblay' },
+              { name: 'Judith Bergeron' },
+              { name: 'Marin Bilodeau'},
             ].map((instructor, idx) => (
-              <div key={idx} className="bg-black/50 rounded-lg overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 fade-in" style={{ animationDelay: `${idx * 0.1}s` }}>
-                <div className="h-64 bg-gradient-to-br from-primary/20 to-secondary flex items-center justify-center">
-                  <Users size={64} className="text-primary/40" />
+              <div key={idx} className="bg-black/50 rounded-lg overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 fade-in group" style={{ animationDelay: `${idx * 0.1}s` }}>
+                <div className="h-64 bg-gradient-to-br from-primary/10 to-secondary flex items-center justify-center relative overflow-hidden">
+                   {/* Placeholder pour photo prof */}
+                  <Users size={64} className="text-primary/40 group-hover:scale-110 transition-transform duration-500" />
                 </div>
-                <div className="p-6">
+                <div className="p-6 text-center">
                   <h3 className="font-script text-2xl text-primary mb-2">{instructor.name}</h3>
-                  <p className="text-gray-400 text-sm">{instructor.specialty}</p>
                 </div>
               </div>
             ))}
