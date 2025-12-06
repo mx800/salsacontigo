@@ -510,7 +510,7 @@ function App() {
                 <div className="w-48 h-48 md:w-56 md:h-56 rounded-full border-4 border-primary/30 p-1 shadow-[0_0_30px_rgba(220,38,38,0.2)]">
                   {/* REMPLACER PAR LA VRAIE PHOTO : src={`${baseUrl}images/ivan.jpg`} */}
                   <div className="w-full h-full rounded-full bg-black overflow-hidden flex items-center justify-center">
-                    <img src={`${baseUrl}images/teacher1.png`} alt="Ivan Salazar" className="w-full h-full object-cover" />
+                    <img src={`${baseUrl}images/teacher1.png`} alt="Ivan Salazar" className="w-full h-full object-contain" />
                   </div>
                 </div>
               </div>
@@ -541,7 +541,7 @@ function App() {
             ].map((instructor, idx) => (
               <div key={idx} className="bg-black/50 rounded-lg overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 fade-in group" style={{ animationDelay: `${idx * 0.1}s` }}>
                 <div className="h-64 bg-gradient-to-br from-primary/10 to-secondary flex items-center justify-center relative overflow-hidden">
-                  <img src={`${baseUrl}images/${instructor.image}`} alt={instructor.name} className="object-contain transition-transform duration-500 group-hover:scale-110" />
+                  <img src={`${baseUrl}images/${instructor.image}`} alt={instructor.name} className="h-full max-w-full object-contain transition-transform duration-500" />
                 </div>
                 <div className="p-6 text-center">
                   <h3 className="font-script text-2xl text-primary mb-2">{instructor.name}</h3>
