@@ -510,7 +510,7 @@ function App() {
                 <div className="w-48 h-48 md:w-56 md:h-56 rounded-full border-4 border-primary/30 p-1 shadow-[0_0_30px_rgba(220,38,38,0.2)]">
                   {/* REMPLACER PAR LA VRAIE PHOTO : src={`${baseUrl}images/ivan.jpg`} */}
                   <div className="w-full h-full rounded-full bg-black overflow-hidden flex items-center justify-center">
-                    <img src={`${baseUrl}images/teacher1.png`} alt="Ivan Salazar" className="w-full h-full object-contain" />
+                    <img src={`${baseUrl}images/teacher1.png`} alt="Ivan Salazar" className="w-full h-full object-cover" />
                   </div>
                 </div>
               </div>
