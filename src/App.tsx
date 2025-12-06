@@ -295,7 +295,7 @@ function App() {
           <img src={`${baseUrl}images/background.png`} alt="Dancing Couple" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"></div>
         </div>
-        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6" style={{ mixBlendMode: 'exclusion' }}>
           <img src={`${baseUrl}images/logo.png`} alt="Salsa Contigo" className="mb-8 animate-fade-in" style={{ animationDelay: '0.2s', animationFillMode: 'both', width: '600px', maxWidth: '90vw', height: 'auto' }} />
           <p className="font-script text-2xl md:text-4xl text-white/90 mb-12 animate-fade-in" style={{ animationDelay: '0.4s', animationFillMode: 'both' }}>Passión, Dinámica, Elegancia</p>
           <ChevronDown className="text-primary animate-float cursor-pointer" size={40} onClick={() => scrollToSection('biographie')} />
