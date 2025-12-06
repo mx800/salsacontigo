@@ -510,8 +510,7 @@ function App() {
                 <div className="w-48 h-48 md:w-56 md:h-56 rounded-full border-4 border-primary/30 p-1 shadow-[0_0_30px_rgba(220,38,38,0.2)]">
                   {/* REMPLACER PAR LA VRAIE PHOTO : src={`${baseUrl}images/ivan.jpg`} */}
                   <div className="w-full h-full rounded-full bg-black overflow-hidden flex items-center justify-center">
-                     {/* Si pas d'image, on affiche une icône, sinon mettre <img src="..." /> */}
-                     <Users size={80} className="text-primary/60" /> 
+                    <img src={`${baseUrl}images/teacher1.png`} alt="Ivan Salazar" className="w-full h-full object-cover" />
                   </div>
                 </div>
                 {/* Petit badge décoratif */}
@@ -539,15 +538,14 @@ function App() {
 
           <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
             {[
-              { name: 'Manon Brassard' },
-              { name: 'Gabrielle Tremblay' },
-              { name: 'Judith Bergeron' },
-              { name: 'Marin Bilodeau'},
+              { name: 'Manon', image: 'teacher2.png' },
+              { name: 'Gabrielle', image: 'teacher3.png' },
+              { name: 'Judith', image: 'teacher4.png' },
+              { name: 'Martin', image: 'teacher5.png'},
             ].map((instructor, idx) => (
               <div key={idx} className="bg-black/50 rounded-lg overflow-hidden border border-primary/20 hover:border-primary/50 transition-all duration-300 fade-in group" style={{ animationDelay: `${idx * 0.1}s` }}>
                 <div className="h-64 bg-gradient-to-br from-primary/10 to-secondary flex items-center justify-center relative overflow-hidden">
-                   {/* Placeholder pour photo prof */}
-                  <Users size={64} className="text-primary/40 group-hover:scale-110 transition-transform duration-500" />
+                  <img src={`${baseUrl}images/${instructor.image}`} alt={instructor.name} className="object-contain transition-transform duration-500 group-hover:scale-110" />
                 </div>
                 <div className="p-6 text-center">
                   <h3 className="font-script text-2xl text-primary mb-2">{instructor.name}</h3>
