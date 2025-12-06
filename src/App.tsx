@@ -513,10 +513,6 @@ function App() {
                     <img src={`${baseUrl}images/teacher1.png`} alt="Ivan Salazar" className="w-full h-full object-cover" />
                   </div>
                 </div>
-                {/* Petit badge décoratif */}
-                <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-primary text-white p-2 rounded-full shadow-lg">
-                  <Music size={20} fill="currentColor" />
-                </div>
               </div>
 
               {/* Info Propriétaire */}
