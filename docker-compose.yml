@@ -9,11 +9,19 @@ services:
     ports:
       - "5173:5173"
     volumes:
-      - .:/app:delegated
       - /app/node_modules
     environment:
       - NODE_ENV=development
       - CI=true
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json
     working_dir: /app
     command: ./node_modules/.bin/vite --host 0.0.0.0
     stdin_open: true
